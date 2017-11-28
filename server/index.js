@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
-const https = require("https");
+const https = require('https');
 const getEvents = require('../lib/eventbrite.js');
 const Promise = require('bluebird');
 const PORT = process.env.PORT || 3000;
