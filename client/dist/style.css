@@ -28,6 +28,19 @@ img {
   right: 0;
 }
 
+.arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+.Piechart {
+  width: 400px;
+  height: 400px;
+}
 .city-search {
   height: 22px;
   width: 152px;
