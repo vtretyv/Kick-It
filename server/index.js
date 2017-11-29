@@ -27,6 +27,7 @@ const db = require('../database/index.js');
 app.get('/initialLoad', (req, res) => {
   const responseObj = {};
   let eventBriteData = [];
+  let currentCity = '';
 
   const monthOptions = {
     method: 'GET',
@@ -48,12 +49,15 @@ app.get('/initialLoad', (req, res) => {
     request(monthOptions, (error, response, body) => {
       const page = JSON.parse(body).pagination.page_number;
       const parsedEvents = JSON.parse(body).events;
+      let city = JSON.parse(body).location.augmented_location.city;
       if (!error) {
         eventBriteData = eventBriteData.concat(parsedEvents);
         if (page < 5) {
           monthOptions.qs.page += 1;
           resolve(getCalls());
         } else {
+          currentCity = city;
+          // console.log('Data length in get calls function', eventBriteData.length);
           resolve(eventBriteData);
         }
       } else {
@@ -64,6 +68,16 @@ app.get('/initialLoad', (req, res) => {
 
   getCalls()
     .then(temp =>
+      // console.log('Temp length before pop', temp.length);
+      
+      // let city = temp.pop();
+      // console.log('temp', temp);
+      // console.log('type of temp', typeof temp);
+      // console.log('City in get calls then', city);
+      // console.log('Temp length after pop', temp.length);
+      // console.log('Temp[249]', temp[249]);      
+      // console.log('Temp[250]', temp[250]);
+      // console.log('Temp[251]', temp[251]);
       temp.map((event) => {
         const imageUrl = event.logo ? event.logo.url : 'https://cdn.evbstatic.com/s3-build/perm_001/f8c5fa/django/images/discovery/default_logos/4.png';
         const catID = event.subcategory_id === 17001 ? event.subcategory_id : event.category_id;
@@ -81,10 +95,11 @@ app.get('/initialLoad', (req, res) => {
           start_datetime: event.start.local,
           end_datetime: event.end.local,
           category_id: catID,
+          city: currentCity,
           day: moment(event.start.local).format('dddd'),
         };
-      }))
-    .then((formattedEvents) => {
+      })
+    ).then((formattedEvents) => {
       db.addEvents(formattedEvents)
         .then(() => {
           db.getTodaysEvents()
