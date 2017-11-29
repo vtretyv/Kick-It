@@ -33,11 +33,11 @@ app.get('/initialLoad', (req, res) => {
     url: 'https://www.eventbriteapi.com/v3/events/search/',
     qs:
     {
-      'start_date.range_start': '2017-11-28T19:00:00',
-      'start_date.range_end': '2017-12-06-T19:00:00',
+      'start_date.range_start': '2017-11-28T00:00:00',
+      'start_date.range_end': '2017-12-06T19:00:00',
       'location.address': 'san francisco',
-      'categories': '103,110,113,116,17001,104,105,102,118,108,109',
-      'page': 1,
+      categories: '103,110,113,116,17001,104,105,102,118,108,109',
+      page: 1,
     },
     headers: {
       authorization: APIKEY,
@@ -48,7 +48,6 @@ app.get('/initialLoad', (req, res) => {
     request(monthOptions, (error, response, body) => {
       const page = JSON.parse(body).pagination.page_number;
       const parsedEvents = JSON.parse(body).events;
-      console.log('in getCalls: ', eventBriteData.length, 'page = ', page);
       if (!error) {
         eventBriteData = eventBriteData.concat(parsedEvents);
         if (page < 5) {
