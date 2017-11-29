@@ -26,10 +26,10 @@ class EventListContainer extends React.Component {
 				return <EventEntry event={event} key={index} />;
 		});
 
-		let weekendRows = this.props.weekendEvents
-			.map((event,index) => {
-				return <WeekendEvent event={event} key={index} />
-		});
+		// let weekendRows = this.props.weekendEvents
+		// 	.map((event,index) => {
+		// 		return <WeekendEvent event={event} key={index} />
+		// });
 
 		return (
 		      <div>
@@ -45,7 +45,6 @@ class EventListContainer extends React.Component {
 		            vertical
 		            inverted
 		          >
-		          {weekendRows}
 		          </Sidebar>
 		          <Sidebar.Pusher>
 		              <Segment basic className="row">
@@ -59,3 +58,30 @@ class EventListContainer extends React.Component {
 }
 
 export default EventListContainer;
+
+// 		return (
+// 		      <div>
+// 		        <Button onClick={this.toggleVisibility}>Weekend Events</Button>
+// 		        <Sidebar.Pushable as={Segment}>
+// 		          <Sidebar
+// 		            as={Menu} 					//as -> Sidebar controls logic of sliding out and in.  as refers to WHAT element is sliding in and out
+// 		            animation='overlay'
+// 		            width='wide'
+// 		            direction='right'
+// 		            visible={visible}
+// 		            icon='labeled'
+// 		            vertical
+// 		            inverted
+// 		          >
+// 		          {weekendRows}
+// 		          </Sidebar>
+// 		          <Sidebar.Pusher>
+// 		              <Segment basic className="row">
+// 		              	{todayRows}
+// 		              </Segment>  
+// 		          </Sidebar.Pusher>
+// 		        </Sidebar.Pushable>
+// 		      </div>		
+// 		      )
+// 	}
+// }

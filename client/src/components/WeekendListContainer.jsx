@@ -57,4 +57,4 @@ class WeekendListContainer extends Component {
   }
 }
 
-export default WeekendListContainer
+export default WeekendListContainer;

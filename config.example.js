@@ -1,3 +1,4 @@
 module.exports = {
-  API_key: '',
+  // APIKEY: 'Bearer <INSERT YOUR API KEY HERE>',
+  APIKEY: '',
 };

@@ -84,7 +84,7 @@ module.exports = {
         Promise.resolve(knex.raw(`INSERT INTO events (id, name, description, venue_id, price, url, image_url, start_datetime, end_datetime, category_id) VALUES ('${event.id}', ${event.name}, ${event.description}, '${event.venue_id}', '${event.price}', '${event.url}', '${event.image_url}', '${event.start_datetime}', '${event.end_datetime}', '${event.category_id}')`)).then( (results) => {
           resolve(results);
         }).catch( (err) => {
-          console.log('Error occurred adding events: ', err);
+          console.log('Error occurred adding events to DB: ');
           reject(err);
         });
       })
@@ -98,14 +98,14 @@ module.exports = {
       Promise.resolve(knex.raw(`SELECT * from events e WHERE e.start_datetime BETWEEN '${todayStart}' AND '${todayEnd}'`)).then( (results) => {
         resolve(results);
       }).catch( (err) => {
-        console.log('Error occurred adding events: ', err);
+        console.log('Error occurred gravbbing todays events from DB ');
         reject(err);
       });
     })
   },
 
   getWeekendEvents: () => {
-    console.log('day of week testing: ', moment().day(3))
+    // console.log('day of week testing: ', moment().day(3))
     // Promise.resolve( () => {
     //   knex.raw(`SELECT * from events e WHERE e.start_datetime BETWEEN '${todayStart}' AND '${todayEnd}'`).catch( (err) => {
     //     console.log('Error occurred adding events: ', err);
@@ -129,7 +129,7 @@ module.exports = {
     }
     return new Promise( (resolve, reject) => {
       resolve(knex.raw(query).catch( (err) => {
-          console.log('Error occurred finding events: ', err);
+          console.log('Error occurred finding events: ');
         })
       )
     }).catch((err) => {
