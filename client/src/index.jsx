@@ -14,30 +14,30 @@ class App extends React.Component {
 	}
 	componentDidMount() {
 		fetch('/initialLoad')
-			.then((response) =>{
+			.then((response) => {
 				console.log('response received from server:', JSON.stringify(response));
 				return response.json();
 			})
-			.then((data) =>{
-				console.log('data about to be put into state:', data.today);
+			.then((data) => {
+				console.log('data about to be put into todays state:', data.today);
 				this.setState({
-					featured: data.today,
-					weekend: data.today,
+					featured: data.today
+				})
+			})
+		.then(() => {
+			fetch('/weekend')
+			.then((response) => {
+				console.log('data from API for weekend', response);
+				return response.json();
+			})
+			.then((data) => {
+				console.log('data about to be put into weekend state: ' , data);
+				let events = JSON.parse(data).events;
+				this.setState({
+					weekend: events,
 				});
-		// 	})
-		// .then(()=>{
-		// 	fetch('/weekend')
-		// 	.then((response) =>{
-		// 		console.log('data from API for weekend', response);
-		// 		return response.json();
-		// 	})
-		// 	.then((data) =>{
-		// 		let events = JSON.parse(data).events;
-		// 		this.setState({
-		// 			weekend: events,
-				});
-			// })
-		// })
+			});
+		});
 	}
 
 	runFilters(filters) {
