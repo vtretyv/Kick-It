@@ -6,7 +6,7 @@ import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui
 import WeekendEvent from './WeekendEvent.jsx';
 
 class EventListContainer extends React.Component {
-	constructor(props) {
+  constructor(props) {
 		super(props);
 	    this.state = { 
 	      visible: false 
