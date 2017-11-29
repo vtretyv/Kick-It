@@ -27,3 +27,8 @@ img {
   position: absolute;
   right: 0;
 }
+
+.city-search {
+  height: 22px;
+  width: 152px;
+}

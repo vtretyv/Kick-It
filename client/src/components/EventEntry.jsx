@@ -1,6 +1,6 @@
 import React from 'react';
-import categories from '../../../categories.json';
 import moment from 'moment';
+import categories from '../../../categories.json';
 
 const EventEntry = (props) => {
 	// API data

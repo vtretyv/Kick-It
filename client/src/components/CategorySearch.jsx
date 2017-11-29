@@ -1,31 +1,31 @@
 import React from 'react';
 
 class CategorySearch extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			category: [],
-		}
-		this.onCheck = this.onCheck.bind(this);
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      category: [],
+    };
+    this.onCheck = this.onCheck.bind(this);
+  }
 
-	onCheck(e) {
-		let category = this.state.category;
-		if (category.includes(e.target.value)) {
-			category.splice(category.indexOf(e.target.value), 1);
-		} else {
-			category.push(e.target.value);
-		}
-		this.setState({category: category});
-		this.props.onChange('category', category);
-	}
+  onCheck(e) {
+    let category = this.state.category;
+    if (category.includes(e.target.value)) {
+      category.splice(category.indexOf(e.target.value), 1);
+    } else {
+      category.push(e.target.value);
+    }
+    this.setState({ category: category });
+    this.props.onChange('category', category);
+  }
 
-	render() {
-		return (
-			<div className="col-6">
-				<div className="form-check form-check-inline">
-					<label className="form-check-label">
-						<input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="music" onChange={this.onCheck}/> Music
+  render() {
+    return (
+      <div className="col-6">
+        <div className="form-check form-check-inline">
+          <label className="form-check-label">
+           <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="music" onChange={this.onCheck}/> Music
 					</label>
 				</div>
 				<div className="form-check form-check-inline">
