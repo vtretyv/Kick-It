@@ -42,6 +42,7 @@ knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
                   // table.foreign('venue_id').references('venues.id');
                   table.string('price');
                   table.varchar('url');
+                  table.varchar('city');
                   table.varchar('image_url');
                   table.dateTime('start_datetime');
                   table.dateTime('end_datetime');
@@ -82,7 +83,7 @@ module.exports = {
   addEvents: (eventsList) => {
     return new Promise( (resolve, reject) => {
       eventsList.forEach( (event) => {
-        Promise.resolve(knex.raw(`INSERT INTO events (id, name, description, venue_id, price, url, image_url, start_datetime, end_datetime, category_id) VALUES ('${event.id}', ${event.name}, ${event.description}, '${event.venue_id}', '${event.price}', '${event.url}', '${event.image_url}', '${event.start_datetime}', '${event.end_datetime}', '${event.category_id}')`)).then((results) => {
+        Promise.resolve(knex.raw(`INSERT INTO events (id, name, description, venue_id, price, url, city, image_url, start_datetime, end_datetime, category_id) VALUES ('${event.id}', ${event.name}, ${event.description}, '${event.venue_id}', '${event.price}', '${event.url}', '${event.city}', '${event.image_url}', '${event.start_datetime}', '${event.end_datetime}', '${event.category_id}')`)).then( (results) => {
           resolve(results);
         }).catch( (err) => {
           console.log('Error occurred adding events to DB: ');
@@ -136,7 +137,19 @@ module.exports = {
     }).catch((err) => {
       throw err;
     });
+  },
+
+  searchEventsByCity: (city)=>{
+    let query;
+    query = `SELECT * FROM events where events.city=${city}`;
+    return new Promise( (resolve, reject) => {
+      resolve(knex.raw(query).catch( (err) => {
+          console.log('Error occurred finding events: ');
+        })
+      )
+    })
   }
+
 }
 
 //==========================================================================================
@@ -156,4 +169,3 @@ const addCategories = (categoryList) => {
     });
   });
 }
-
