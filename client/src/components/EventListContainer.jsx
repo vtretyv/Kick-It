@@ -26,10 +26,10 @@ class EventListContainer extends React.Component {
 				return <EventEntry event={event} key={index} />;
 		});
 
-		// let weekendRows = this.props.weekendEvents
-		// 	.map((event,index) => {
-		// 		return <WeekendEvent event={event} key={index} />
-		// });
+		let weekendRows = this.props.weekendEvents
+			.map((event,index) => {
+				return <WeekendEvent event={event} key={index} />
+		});
 
 		return (
 		      <div>
@@ -45,6 +45,7 @@ class EventListContainer extends React.Component {
 		            vertical
 		            inverted
 		          >
+		          {weekendRows}
 		          </Sidebar>
 		          <Sidebar.Pusher>
 		              <Segment basic className="row">
