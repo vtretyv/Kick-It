@@ -116,6 +116,13 @@ app.get('/initialLoad', (req, res) => {
             res.json(data);
           });
       });
+    }).then(() =>{
+      db.searchEventsByCity('San Francisco').then((cityEvents) =>{
+        console.log('in the search events by city then');
+        console.log('CityEvents', cityEvents);
+      }).catch((err)=>{
+        console.log('Error fetching events for San Francisco Hardcoded')
+      });
     });
 });
 

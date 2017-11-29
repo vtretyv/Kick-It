@@ -140,7 +140,7 @@ module.exports = {
 
   searchEventsByCity: (city)=>{
     let query;
-    query = `SELECT * FROM events where events.city=${city}`;
+    query = `SELECT * FROM events where events.city='${city}'`;
     return new Promise( (resolve, reject) => {
       resolve(knex.raw(query).catch( (err) => {
           console.log('Error occurred finding events: ');
