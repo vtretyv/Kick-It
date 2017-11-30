@@ -111,24 +111,33 @@ class App extends React.Component {
     return d3Data;
   }
 
-  runFilters(filters) {
-    fetch('/filter', {
-      headers: {
-        //'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify(filters),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((events) => {
-        this.setState({
-          featured: events.rows
-        });
-      });
-  }
+	runFilters(filters) {
+		fetch('/filter', {
+			headers: {
+				//'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			},
+			method: 'POST',
+			body: JSON.stringify(filters),
+		})
+		.then((response)=> {
+			console.log('RESPONSE in runFilters:', response);
+			return response.json();
+		})
+		.then((events)=> {
+			console.log('EVENTS in runFilters:', events);
+			if (events.rows){
+				this.setState({
+					featured: events.rows
+				})
+			} else {
+				this.setState({
+					featured: events.today.rows
+				})
+			}
+			
+		})
+	}
 
   render() {
     return (

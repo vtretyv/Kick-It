@@ -97,11 +97,12 @@ module.exports = {
   //   resolve(results);
   // })
 
-  getTodaysEvents: () => {
-    const todayStart = moment().startOf('day').utcOffset(0, true).format() //moment().startOf('day').format();
-    const todayEnd = moment().add(50, 'days').utcOffset(0, true).format() //moment().endOf('day').format();
+
+  getTodaysEvents: (city = 'San Francisco') => {
+    const todayStart = moment().startOf('day').format();
+    const todayEnd = moment().endOf('day').format();
     return new Promise( (resolve, reject) => {
-      Promise.resolve(knex.raw(`SELECT * from events e WHERE e.start_datetime BETWEEN '${todayStart}' AND '${todayEnd}'`)).then( (results) => {
+      Promise.resolve(knex.raw(`SELECT * from events e WHERE e.start_datetime BETWEEN '${todayStart}' AND '${todayEnd}' AND e.city='${city}'`)).then( (results) => {
         resolve(results);
       }).catch( (err) => {
         console.log('Error occurred gravbbing todays events from DB ');

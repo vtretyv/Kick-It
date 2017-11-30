@@ -237,6 +237,7 @@ app.post('/filter', (request, response) => {
   const { date, price } = request.body;
   const categories = request.body.category;
   let city = request.body.city;
+  city = city.toLowerCase();
   // const date = request.body.date;
   // const price = request.body.price;
   console.log('City works?', request.body.city)
@@ -264,14 +265,14 @@ app.post('/filter', (request, response) => {
           // console.log('massaged data after massage', massagedData);
           db.addEvents(massagedData).then(() => {
             console.log('Massaged Data added to the db');
-            res.redirect(307, '')
-            db.getTodaysEvents()
+            // res.redirect(307, '');
+            db.getTodaysEvents(city)
               .then((data) => {
                 console.log('in the then of get today events in /filter');
                 let responseObj = {};
-                responseObj.today = data.rows;
+                // responseObj.today = data;
                 response.status(200);
-                response.json(responseObj);
+                response.json(data);
               }).catch((err) => {
                 console.log('Error getting todays events after db seeding', err);
               })
@@ -292,23 +293,12 @@ app.post('/filter', (request, response) => {
       console.log('Error in the filter searchEventsByCity')
     })
   }
-  db.searchAllEvents(date, categories, price, city)
-    .then((data) => {
-      response.json(data);
-    });
+  // db.searchAllEvents(date, categories, price, city)
+  //   .then((data) => {
+  //     response.json(data);
+  //   });
 });
 
-app.get('/filter', (request, response) =>{
-  db.getTodaysEvents()
-    .then((data) => {
-      console.log('in the then of get today events in /filter');
-      let responseObj = {};
-      responseObj.today = data.rows;
-      response.json(responseObj);
-    }).catch((err) => {
-      console.log('Error getting todays events after db seeding', err);
-    })
-})
 
 
 // ======================================================================
