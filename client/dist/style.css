@@ -42,10 +42,73 @@ img {
   height: 400px;
 }
 
-.States {
-  width: 1000px;
-  height: 1000px;
-}.city-search {
+.city-search {
   height: 22px;
   width: 152px;
+}
+
+.toolPie {
+  position: absolute;           
+  top: 160px;
+  left: 140px;
+  width: 140px;
+  height: 10px;
+  text-align: center;
+  padding: 20px;             
+  margin: 10px;
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 1px;      
+  border-radius: 2px;           
+  pointer-events: none;
+  transition: 0.5s;
+  opacity: 0;
+  visibility: hidden; 
+}
+
+.toolPie.show {
+  opacity: 0.9;
+  transition-duration: 6000ms;
+  visibility: visible; 
+}
+
+.toolUS {
+  position: absolute;           
+  text-align: center;
+  padding: 20px;             
+  margin: 10px;
+  font: 12px sans-serif;        
+  background: lightsteelblue;   
+  border: 1px;      
+  border-radius: 2px;           
+  pointer-events: none;
+  transition: 0.5s;
+  opacity: 0;
+  visibility: hidden; 
+}
+
+.toolUS.show {
+  opacity: 0.9;
+  transition-duration: 6000ms;
+  visibility: visible; 
+}
+
+.state{
+  fill: lightsteelblue;
+  stroke: #a9a9a9;
+  stroke-width: 1;
+  }
+
+.state:hover{
+  background: lightsteelblue;   
+  fill-opacity:0.5;
+}
+
+.States {
+  width: 960px;
+  height: 600px;
+}
+
+.container {
+  position: relative;
 }

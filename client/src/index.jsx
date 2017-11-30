@@ -226,9 +226,10 @@ class App extends React.Component {
         <SearchBarContainer runFilters={this.runFilters.bind(this)}/>
         <div className="album text-muted">
           <div className="container">
-
-            <Piechart data={this.state.d3Data} />
-            <States />
+            <div>
+              <Piechart data={this.state.d3Data} />
+              <States />
+            </div>
             <EventListContainer 
               featuredEvents={this.state.featured}
               weekendEvents={this.state.weekend.slice(0,10)} 

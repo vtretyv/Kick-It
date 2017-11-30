@@ -100,9 +100,6 @@ app.get('/initialLoad', (req, res) => {
   const responseObj = {};
   let eventBriteData = [];
   //2017-12-19T17:09:28-08:00
-  console.log(typeof moment().startOf('day').format());
-  console.log(moment().add(20, 'days').format());
-
   const monthOptions = {
     method: 'GET',
     url: 'https://www.eventbriteapi.com/v3/events/search/',
