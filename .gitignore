@@ -35,4 +35,5 @@ client/dist/bundle.js
 client/dist/bundle.js
 bundle.js
 sampleUserData.js
+config.js
 
