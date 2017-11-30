@@ -6,20 +6,17 @@ const geocoder = require('google-geocoder');
 
 
 const EventMap = withScriptjs(withGoogleMap(props =>
-  <GoogleMap
+  (<GoogleMap
     defaultZoom={13}
     defaultCenter={{ lat: 37.7749, lng: -122.4194 }}
   >
-    <Marker
-      position={savedLocations[0]}
-    />
-    <Marker
-      position={savedLocations[1]}
-    />
-    <Marker
-      position={savedLocations[2]}
-    />
-  </GoogleMap>));
+    {savedLocations.map((address, index) => {
+      return <Marker
+               key={index.toString()}
+               position={address}
+             />
+})}
+  </GoogleMap>)));
 
 export default EventMap;
 
