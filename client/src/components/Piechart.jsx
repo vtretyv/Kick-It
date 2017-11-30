@@ -11,15 +11,15 @@ const radius = Math.min(width, height) / 2;
 
 const dataArc = arc()
   .outerRadius(radius - 10)
-  .innerRadius(0);
+  .innerRadius(100);
 
 const labelArc = arc()
-    .outerRadius(radius - 40)
-    .innerRadius(radius - 40);
+  .outerRadius(radius - 40)
+  .innerRadius(radius - 40);
 
 const pieChart = pie()
-    .sort(null)
-    .value(d => d.value);
+  .sort(null)
+  .value(d => d.value);
 
 
 const Piechart = ({ data }) => (
@@ -35,7 +35,7 @@ const Piechart = ({ data }) => (
             dy='.55em'
             transform={`translate(${labelArc.centroid(d)})`}
           >
-            {d.data.label}
+            {d.value !== 0 && d.data.label}
           </text>
         </g>
       ))}

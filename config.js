@@ -1,0 +1,4 @@
+module.exports = {
+  // APIKEY: 'Bearer 5IBV7MPE324H46CPUATD',
+  APIKEY: 'Bearer 5IBV7MPE324H46CPUATD'
+};

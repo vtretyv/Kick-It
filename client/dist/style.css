@@ -41,7 +41,11 @@ img {
   width: 400px;
   height: 400px;
 }
-.city-search {
+
+.States {
+  width: 1000px;
+  height: 1000px;
+}.city-search {
   height: 22px;
   width: 152px;
 }
