@@ -97,12 +97,8 @@ const db = require('../database/index.js');
 app.get('/initialLoad', (req, res) => {
   const responseObj = {};
   let eventBriteData = [];
-<<<<<<< HEAD
-  // 2017-12-19T17:09:28-08:00
-=======
   let currentCity = '';
 
->>>>>>> added city to db and rebased
   const monthOptions = {
     method: 'GET',
     url: 'https://www.eventbriteapi.com/v3/events/search/',
@@ -139,6 +135,27 @@ app.get('/initialLoad', (req, res) => {
       }
     });
   });
+
+  // const getCallsForCity = (city) => new Promise((resolve, reject) => {
+  //   request(monthOptions, (error, response, body) => {
+  //     const page = JSON.parse(body).pagination.page_number;
+  //     const parsedEvents = JSON.parse(body).events;
+  //     let city = JSON.parse(body).location.augmented_location.city;
+  //     if (!error) {
+  //       eventBriteData = eventBriteData.concat(parsedEvents);
+  //       if (page < 5) {
+  //         monthOptions.qs.page += 1;
+  //         resolve(getCalls());
+  //       } else {
+  //         currentCity = city;
+  //         // console.log('Data length in get calls function', eventBriteData.length);
+  //         resolve(eventBriteData);
+  //       }
+  //     } else {
+  //       reject(error);
+  //     }
+  //   });
+  // });
 
   getCalls()
     .then(temp =>
@@ -191,6 +208,27 @@ app.get('/initialLoad', (req, res) => {
     });
 });
 
+let dataMassager = (event, city)=>{
+  const imageUrl = event.logo ? event.logo.url : 'https://cdn.evbstatic.com/s3-build/perm_001/f8c5fa/django/images/discovery/default_logos/4.png';
+  const catID = event.subcategory_id === 17001 ? event.subcategory_id : event.category_id;
+  const defaultPrice = event.is_free ? 'free' : 'paid';
+  const eventName = `$$${event.name.text}$$`;
+  const eventDesc = `$$${event.description.text}$$`;
+  return {
+    id: event.id,
+    name: eventName,
+    description: eventDesc,
+    venue_id: event.venue_id,
+    price: defaultPrice,
+    url: event.url,
+    image_url: imageUrl,
+    start_datetime: event.start.local,
+    end_datetime: event.end.local,
+    category_id: catID,
+    city: city,
+    day: moment(event.start.local).format('dddd'),
+  };
+}
 
 // ======================================================================
 //                    Query the DB on client filters
@@ -202,21 +240,56 @@ app.post('/filter', (request, response) => {
   // const date = request.body.date;
   // const price = request.body.price;
   console.log('City works?', request.body.city)
-  db.searchAllEvents(date, categories, price)
   if (city === '') {
+    // console.log('in the /filter if');
     city = 'San Francisco';
   } else {
+    // console.log('in the else of /filter');
     db.searchEventsByCity(city).then((cityEvents)=>{
-      if (cityEvents.length === 0){
+      console.log('in the filter else then');
+      console.log('city', city);
+      // console.log('City Events in the filter db query', cityEvents);
+      if (cityEvents.rows.length === 0) {
         //Do API call for city
+        console.log('There are no events for city in the db');
+        getEvents.cityApi(city).then((cityEvents)=>{
+          console.log('in the then of cityApi');
+          // console.log('city events for new city', cityEvents);
+          // console.log('typeof cityEvents', typeof cityEvents);
+          let parsedEvents = JSON.parse(cityEvents).events;
+          // console.log('RAW DATA', JSON.parse(cityEvents));
+          // console.log('PARSED EVENTS', parsedEvents);
+          let massagedData = [];
+          parsedEvents.forEach((event) => {massagedData.push(dataMassager(event, city)); });
+          // console.log('massaged data after massage', massagedData);
+          db.addEvents(massagedData).then(() => {
+            console.log('Massaged Data added to the db');
+            res.redirect(307, '')
+            db.getTodaysEvents()
+              .then((data) => {
+                console.log('in the then of get today events in /filter');
+                let responseObj = {};
+                responseObj.today = data.rows;
+                response.status(200);
+                response.json(responseObj);
+              }).catch((err) => {
+                console.log('Error getting todays events after db seeding', err);
+              })
+          }).catch((err) => {
+            console.log('Error thrown while inserting massaged data into db');
+          })
+        })
       } else {
         //We know we already have it in our DB, serve it from db
+        console.log('There are events for the city in the db');
         db.searchAllEvents(date, categories, price, city)
         .then((data) => {
           response.json(data);
         });
       }
 
+    }).catch((err)=>{
+      console.log('Error in the filter searchEventsByCity')
     })
   }
   db.searchAllEvents(date, categories, price, city)
@@ -224,6 +297,18 @@ app.post('/filter', (request, response) => {
       response.json(data);
     });
 });
+
+app.get('/filter', (request, response) =>{
+  db.getTodaysEvents()
+    .then((data) => {
+      console.log('in the then of get today events in /filter');
+      let responseObj = {};
+      responseObj.today = data.rows;
+      response.json(responseObj);
+    }).catch((err) => {
+      console.log('Error getting todays events after db seeding', err);
+    })
+})
 
 
 // ======================================================================
