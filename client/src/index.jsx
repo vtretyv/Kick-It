@@ -63,9 +63,11 @@ class App extends React.Component {
 				this.setState({
 					featured: events.today.rows
 				})
-			}
-			
+			}	
 		})
+		// .then(() => {
+		// 	fetch(`/weekend/${}`)
+		// })
 	}
 
 	render() {

@@ -128,14 +128,15 @@ app.get('/initialLoad', (req, res) => {
             res.json(data);
           });
       });
-    }).then(() =>{
-      db.searchEventsByCity('San Francisco').then((cityEvents) =>{
-        console.log('in the search events by city then');
-        // console.log('CityEvents', cityEvents);
-      }).catch((err)=>{
-        console.log('Error fetching events for San Francisco Hardcoded')
-      });
     });
+    // .then(() =>{
+    //   db.searchEventsByCity('San Francisco').then((cityEvents) =>{
+    //     console.log('in the search events by city then');
+    //     // console.log('CityEvents', cityEvents);
+    //   }).catch((err)=>{
+    //     console.log('Error fetching events for San Francisco Hardcoded')
+    //   });
+    // });
 });
 
 let dataMassager = (event, city)=>{
@@ -173,6 +174,10 @@ app.post('/filter', (request, response) => {
   if (city === '') {
     // console.log('in the /filter if');
     city = 'San Francisco';
+    db.searchAllEvents(date, categories, price, city)
+      .then((data) => {
+        response.json(data);
+      });
   } else {
     // console.log('in the else of /filter');
     db.searchEventsByCity(city).then((cityEvents)=>{
@@ -182,11 +187,13 @@ app.post('/filter', (request, response) => {
       if (cityEvents.rows.length === 0) {
         //Do API call for city
         console.log('There are no events for city in the db');
-        getEvents.cityApi(city).then((cityEvents)=>{
+        getEvents.cityApi(city, 5).then((cityEvents)=>{
           console.log('in the then of cityApi');
-          // console.log('city events for new city', cityEvents);
+          console.log('city events for new city', cityEvents);
           // console.log('typeof cityEvents', typeof cityEvents);
-          let parsedEvents = JSON.parse(cityEvents).events;
+          // let parsedEvents = JSON.parse(cityEvents).events;
+          let parsedEvents = cityEvents;
+          
           // console.log('RAW DATA', JSON.parse(cityEvents));
           // console.log('PARSED EVENTS', parsedEvents);
           let massagedData = [];
@@ -194,21 +201,37 @@ app.post('/filter', (request, response) => {
           // console.log('massaged data after massage', massagedData);
           db.addEvents(massagedData).then(() => {
             console.log('Massaged Data added to the db');
-            // res.redirect(307, '');
-            db.getTodaysEvents(city)
+            console.log('DATE of filter:', date);
+            db.searchAllEvents(date, categories, price, city)
               .then((data) => {
-                console.log('in the then of get today events in /filter');
-                let responseObj = {};
-                // responseObj.today = data;
                 response.status(200);
                 response.json(data);
-              }).catch((err) => {
+              })
+            // res.redirect(307, '');
+            // db.getTodaysEvents(city)
+            //   .then((data) => {
+            //     console.log('in the then of get today events in /filter');
+            //     let responseObj = {};
+            //     // responseObj.today = data;
+            //     response.status(200);
+            //     response.json(data);
+            //   })
+              .catch((err) => {
                 console.log('Error getting todays events after db seeding', err);
               })
-          }).catch((err) => {
-            console.log('Error thrown while inserting massaged data into db');
           })
-        })
+          // .then(() => {
+          //   app.get('/weekend'+'/'+city, (req, res) => {
+          //     getEvents.weekend(city)
+          //       .then((data) => {
+          //         res.json(data);
+          //       });
+          //   });
+          // })
+            .catch((err) => {
+              console.log('Error thrown while inserting massaged data into db');
+            });
+        });
       } else {
         //We know we already have it in our DB, serve it from db
         console.log('There are events for the city in the db');
