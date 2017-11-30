@@ -50,7 +50,7 @@ const ToolTipState = ({ data }) => {
   return (
     <div>
       <span className="toolUS">
-        HELLO!
+        <p>{`${data.name.toUpperCase()}`}!</p>
       </span>
     </div>);
 };
@@ -100,8 +100,8 @@ class States extends Component {
       const mouseY = e.clientY;
       const toolTipUS = document.getElementsByClassName('toolUS');
       // console.log('toolTipUS: ', typeof toolTipUS, Array.isArray(toolTipUS), toolTipUS[0]);
-      // toolTipUS[0].style.top = mouseX + 'px';
-      // toolTipUS[0].style.left = mouseY + 'px';
+      toolTipUS[0].style.top = (mouseY - 200) + 'px';
+      toolTipUS[0].style.left = (mouseX - 300) + 'px';
        console.log(`mouse is at: (${mouseX}, ${mouseY})`);
       // console.log(`mouse is at: (${this.state.mouseX}, ${this.state.mouseY})`);
     // });

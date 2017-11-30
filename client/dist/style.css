@@ -88,6 +88,33 @@ img {
 }
 
 .toolUS {
+  position: absolute;           
+/*  top: 160px;
+  left: 140px;*/
+  width: 140px;
+  height: 10px;
+  text-align: top;
+  padding: 20px;             
+  margin: 10px;
+  font: 12px sans-serif;        
+  background: darkblue;   
+  border: 1px;      
+  border-radius: 8px;  
+  font-color: white;
+  text-align: top;     
+  pointer-events: none;
+  /*transition: 0.1s;*/
+  opacity: 0.9;
+  /*transition-duration: 600ms;*/
+  visibility: visible; 
+}
+
+.toolUS p {
+  font-color: red;
+  text-align: top; 
+}
+
+/*.toolUS {
   position: absolute;  
   top: 160px;
   left: 140px;
@@ -110,7 +137,7 @@ img {
   opacity: 0.9;
   transition-duration: 60ms;
   visibility: visible; 
-}
+}*/
 
 /*.toolUS:hover span {
   opacity: 0.9;
