@@ -50,13 +50,21 @@ class App extends React.Component {
 			body: JSON.stringify(filters),
 		})
 		.then((response)=> {
-
+			console.log('RESPONSE in runFilters:', response);
 			return response.json();
 		})
 		.then((events)=> {
-			this.setState({
-				featured: events.rows
-			})
+			console.log('EVENTS in runFilters:', events);
+			if (events.rows){
+				this.setState({
+					featured: events.rows
+				})
+			} else {
+				this.setState({
+					featured: events.today.rows
+				})
+			}
+			
 		})
 	}
 
