@@ -68,16 +68,6 @@ app.get('/initialLoad', (req, res) => {
 
   getCalls()
     .then(temp =>
-      // console.log('Temp length before pop', temp.length);
-      
-      // let city = temp.pop();
-      // console.log('temp', temp);
-      // console.log('type of temp', typeof temp);
-      // console.log('City in get calls then', city);
-      // console.log('Temp length after pop', temp.length);
-      // console.log('Temp[249]', temp[249]);      
-      // console.log('Temp[250]', temp[250]);
-      // console.log('Temp[251]', temp[251]);
       temp.map((event) => {
         const imageUrl = event.logo ? event.logo.url : 'https://cdn.evbstatic.com/s3-build/perm_001/f8c5fa/django/images/discovery/default_logos/4.png';
         const catID = event.subcategory_id === 17001 ? event.subcategory_id : event.category_id;
@@ -115,13 +105,6 @@ app.get('/initialLoad', (req, res) => {
           .then((data) => {
             res.json(data);
           });
-      });
-    }).then(() =>{
-      db.searchEventsByCity('San Francisco').then((cityEvents) =>{
-        console.log('in the search events by city then');
-        // console.log('CityEvents', cityEvents);
-      }).catch((err)=>{
-        console.log('Error fetching events for San Francisco Hardcoded')
       });
     });
 });
