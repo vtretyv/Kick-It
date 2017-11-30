@@ -28,7 +28,10 @@ const geo = geocoder({
 });
 
 // sample address data
-const places = ['944 Market Street, San Francisco', '201 Folsom Street, San Francisco', '245 Market Street, San Francisco'];
+const places = ['944 Market Street, San Francisco', '201 Folsom Street, San Francisco', '245 Market Street, San Francisco',
+  '2500 Market Street, San Francisco', '4288 24th Street San Francisco', '101 Montgomery Street San Francisco',
+  '563 Ruger Street, San Francisco', '2114 Filmore Street, San Francisco', '55 Music Concourse Drive, San Francisco',
+  '824 Antoinette Lane, South San Francisco'];
 
 // function retrieves lat/long of each address
 const getLatLong = (arr) => {
@@ -38,6 +41,7 @@ const getLatLong = (arr) => {
       locations.push(res[0].location);
     });
   });
+  console.log(locations);
   return locations;
 };
 
