@@ -68,6 +68,7 @@ app.get('/initialLoad', (req, res) => {
 
   getCalls()
     .then(temp =>
+
       temp.map((event) => {
         const imageUrl = event.logo ? event.logo.url : 'https://cdn.evbstatic.com/s3-build/perm_001/f8c5fa/django/images/discovery/default_logos/4.png';
         const catID = event.subcategory_id === 17001 ? event.subcategory_id : event.category_id;
@@ -106,6 +107,13 @@ app.get('/initialLoad', (req, res) => {
             res.json(data);
           });
       });
+    }).then(() =>{
+      db.searchEventsByCity('San Francisco').then((cityEvents) =>{
+        console.log('in the search events by city then');
+        // console.log('CityEvents', cityEvents);
+      }).catch((err)=>{
+        console.log('Error fetching events for San Francisco Hardcoded')
+      });
     });
 });
 
@@ -118,10 +126,8 @@ app.post('/filter', (request, response) => {
   let city = request.body.city;
   // const date = request.body.date;
   // const price = request.body.price;
-<<<<<<< HEAD
   console.log('City works?', request.body.city)
   db.searchAllEvents(date, categories, price)
-=======
   if (city === '') {
     city = 'San Francisco';
   } else {
@@ -139,7 +145,6 @@ app.post('/filter', (request, response) => {
     })
   }
   db.searchAllEvents(date, categories, price, city)
->>>>>>> Got refreshing to work properly by using raw psql WHERE NOT EXISTS
     .then((data) => {
       response.json(data);
     });
