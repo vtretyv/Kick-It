@@ -67,6 +67,7 @@
     "react-datepicker": "^0.61.0",
     "react-dom": "^16.1.1",
     "react-element-to-jsx-string": "^13.1.0",
+    "react-google-maps": "^9.4.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "semantic-ui-react": "^0.76.0",

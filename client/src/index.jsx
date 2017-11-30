@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import SearchBarContainer from './components/SearchBarContainer.jsx';
 import EventListContainer from './components/EventListContainer.jsx';
+import EventMap from './components/EventMap.jsx';
 import Piechart from './components/Piechart.jsx';
 import States from './components/States.jsx';
+
 
 
  // 103   | music         | Music
@@ -17,6 +19,9 @@ import States from './components/States.jsx';
  // 118   | autoBoatAir   | Auto, Boat, Air
  // 108   | active        | Active
  // 109   | active        | Active
+
+
+
 
 class App extends React.Component {
   constructor() {
@@ -151,12 +156,11 @@ class App extends React.Component {
 			})
 		})
 
-	}
 
-  render() {
-    return (
-      <div>
-        <h1>Kick It</h1>
+	render() {
+		return (
+			<div>
+				<h1>Kick It</h1>
         <div>
           {this.state.isLoggedIn ?
             <div>
@@ -171,22 +175,29 @@ class App extends React.Component {
             </div>
            }
         </div>
-        <SearchBarContainer runFilters={this.runFilters.bind(this)}/>
-        <div className="album text-muted">
-          <div className="container">
+				<SearchBarContainer runFilters={this.runFilters.bind(this)}/>
+				<div className="album text-muted">
+					<div className="container">
             <div>
               <States />
               <Piechart data={this.state.d3Data} />
             </div>
-            <EventListContainer 
-              featuredEvents={this.state.featured}
-              weekendEvents={this.state.weekend.slice(0,10)} 
-            />
-          </div>
-        </div>        
-      </div>
-    )
-  }
-}
+						<EventListContainer 
+							featuredEvents={this.state.featured}
+							weekendEvents={this.state.weekend.slice(0,10)} 
+						/>
+					</div>
+					<EventMap
+            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
+            loadingElement={<div style={{ height: `100%` }} />}
+            containerElement={<div style={{ height: `350px` }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+          />
+				</div>
+				
+			</div>
+		)
+	}
+
 
 ReactDOM.render(<App />, document.getElementById('app'));

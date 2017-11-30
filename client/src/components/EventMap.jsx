@@ -1,10 +1,15 @@
 import React from 'react';
-//  import googleMaps wrapper
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 
-//  conditionally render a map bases on a boolean click to change state
-//  step 1 render a map located in SF 
-//  get locations and add a marker
-//  
-
+const EventMap = withScriptjs(withGoogleMap(props =>
+  <GoogleMap
+    defaultZoom={13}
+    defaultCenter={{ lat: 37.7749, lng: -122.4194 }}
+  >
+    <Marker
+      position={{ lat: 37.783697, lng: -122.408966 }}
+    />
+  </GoogleMap>));
 
 export default EventMap;
+
