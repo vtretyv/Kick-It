@@ -29,14 +29,21 @@ function labelPath(d) {
   return path;
 }
 
-
 const ToolTipPie = ({ data }) => {
-  const componentClasses = ['toolPie'];
-  if (data) { componentClasses.push('show'); }
+  // const componentClasses = ['toolPie'];
+  // if (data) { componentClasses.push('show'); }
   return (
-    <div className={componentClasses.join(' ')} >{`${data.label} ${data.value}`}</div>
+    <div className="toolPie">{`${data.label} ${data.value}`}</div>
   );
 };
+
+// const ToolTipPie = ({ data }) => {
+//   const componentClasses = ['toolPie'];
+//   if (data) { componentClasses.push('show'); }
+//   return (
+//     <div className={componentClasses.join(' ')} >{`${data.label} ${data.value}`}</div>
+//   );
+// };
 
 
 class Piechart extends Component {
@@ -60,6 +67,9 @@ class Piechart extends Component {
       hover: false
     });
   };
+  
+
+  // <g transform .... puts the pie chart in the middle of the div object
 
   render() {
     return (
@@ -74,7 +84,8 @@ class Piechart extends Component {
               const cx = center[0];
               const cy = center[1];
               const h = Math.sqrt((cx * cx) + (cy * cy));
-              const labelRadius = 230;
+              const labelRadius = 60;
+              console.log(`center = ${cx}, ${cy} with a hypotenuse of ${h}`);
               const labelPosition = [((cx / h) * labelRadius), ((cy / h) * labelRadius)];
 
               return (<g key={i} className="arc">
