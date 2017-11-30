@@ -152,8 +152,8 @@ class App extends React.Component {
         <div className="album text-muted">
           <div className="container">
             <div>
-              <Piechart data={this.state.d3Data} />
               <States />
+              <Piechart data={this.state.d3Data} />
             </div>
             <EventListContainer 
               featuredEvents={this.state.featured}

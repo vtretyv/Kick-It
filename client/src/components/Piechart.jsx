@@ -11,7 +11,7 @@ const radius = Math.min(width, height) / 2;
 
 const dataArc = arc()
   .outerRadius(radius - 10)
-  .innerRadius(100);
+  .innerRadius(0);
 
 const labelArc = arc()
   .outerRadius(radius - 40)
@@ -21,7 +21,13 @@ const pieChart = pie()
   .sort(null)
   .value(d => d.value);
 
+function labelPath(d) {
+  let path = "";
 
+
+
+  return path;
+}
 
 
 const ToolTipPie = ({ data }) => {
@@ -59,24 +65,35 @@ class Piechart extends Component {
     return (
       <div className="container">
         <div>{this.state.hover === true && <ToolTipPie data={this.state.selection} />}</div>
-        <svg className="Piechart" width={width} heigth={height} >
-          <g transform={`translate(${width / 2}, ${height / 2})`}>
-            {pieChart(this.props.data).map((d, i) => (
-              <g key={i} className="arc">
+        <svg className="Piechart" width={width+200} heigth={height+200} >
+          <g transform={`translate(${(width + 200) / 2}, ${(height + 200) / 2})`}>
+            {pieChart(this.props.data).map((d, i) => {
+
+              // Trig
+              const center = labelArc.centroid(d);
+              const cx = center[0];
+              const cy = center[1];
+              const h = Math.sqrt((cx * cx) + (cy * cy));
+              const labelRadius = 230;
+              const labelPosition = [((cx / h) * labelRadius), ((cy / h) * labelRadius)];
+
+              return (<g key={i} className="arc">
                 <path
                   d={dataArc(d)}
                   fill={color(d.data.label)}
                   onMouseOver={(e) => { this.mouseOverEvent(d, e); }}
                   onMouseLeave={() => { this.mouseLeaveEvent(); }}
                 />
+                <path d={labelPath(center, labelPosition)} />
                 <text
-                  dy='.55em'
-                  transform={`translate(${labelArc.centroid(d)})`}
+                  className="label"
+                  dy='.15em'
+                  transform={`translate(${labelPosition})`}
                 >
                   {d.value !== 0 && d.data.label}
                 </text>
-              </g>
-            ))}
+              </g>);
+            })}
           </g>
         </svg>
       </div>);

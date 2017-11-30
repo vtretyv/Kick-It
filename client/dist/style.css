@@ -37,11 +37,6 @@ img {
   stroke: #fff;
 }
 
-.Piechart {
-  width: 400px;
-  height: 400px;
-}
-
 .city-search {
   height: 22px;
   width: 152px;
@@ -109,6 +104,15 @@ img {
   height: 600px;
 }
 
+.Piechart {
+  width: 600px;
+  height: 600px;
+}
+
 .container {
   position: relative;
+}
+
+.label {
+  position: absolute;
 }
