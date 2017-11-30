@@ -74,6 +74,7 @@ const Events = bookshelf.Collection.extend({
 
 
 module.exports = {
+  //Promise.resolve(knex.raw(`INSERT INTO events (id, name, description, venue_id, price, url, image_url, start_datetime, end_datetime, category_id) VALUES ('${event.id}', ${event.name}, ${event.description}, '${event.venue_id}', '${event.price}', '${event.url}', '${event.image_url}', '${event.start_datetime}', '${event.end_datetime}', '${event.category_id}')`))
   // add events to table
   // eventsList should be an array of event objects
   // an event object should look like the following:
@@ -81,7 +82,7 @@ module.exports = {
   addEvents: (eventsList) => {
     return new Promise( (resolve, reject) => {
       eventsList.forEach( (event) => {
-        Promise.resolve(knex.raw(`INSERT INTO events (id, name, description, venue_id, price, url, image_url, start_datetime, end_datetime, category_id) VALUES ('${event.id}', ${event.name}, ${event.description}, '${event.venue_id}', '${event.price}', '${event.url}', '${event.image_url}', '${event.start_datetime}', '${event.end_datetime}', '${event.category_id}')`)).then( (results) => {
+        Promise.resolve(knex.raw(`INSERT INTO events (id, name, description, venue_id, price, url, image_url, start_datetime, end_datetime, category_id) VALUES ('${event.id}', ${event.name}, ${event.description}, '${event.venue_id}', '${event.price}', '${event.url}', '${event.image_url}', '${event.start_datetime}', '${event.end_datetime}', '${event.category_id}')`)).then((results) => {
           resolve(results);
         }).catch( (err) => {
           console.log('Error occurred adding events to DB: ');
@@ -92,8 +93,8 @@ module.exports = {
   },
 
   getTodaysEvents: () => {
-    const todayStart = moment().startOf('day').format();
-    const todayEnd = moment().endOf('day').format();
+    const todayStart = moment().startOf('day').utcOffset(0, true).format() //moment().startOf('day').format();
+    const todayEnd = moment().add(50, 'days').utcOffset(0, true).format() //moment().endOf('day').format();
     return new Promise( (resolve, reject) => {
       Promise.resolve(knex.raw(`SELECT * from events e WHERE e.start_datetime BETWEEN '${todayStart}' AND '${todayEnd}'`)).then( (results) => {
         resolve(results);
