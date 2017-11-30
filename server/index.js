@@ -119,7 +119,7 @@ app.get('/initialLoad', (req, res) => {
     }).then(() =>{
       db.searchEventsByCity('San Francisco').then((cityEvents) =>{
         console.log('in the search events by city then');
-        console.log('CityEvents', cityEvents);
+        // console.log('CityEvents', cityEvents);
       }).catch((err)=>{
         console.log('Error fetching events for San Francisco Hardcoded')
       });
@@ -132,10 +132,31 @@ app.get('/initialLoad', (req, res) => {
 app.post('/filter', (request, response) => {
   const { date, price } = request.body;
   const categories = request.body.category;
+  let city = request.body.city;
   // const date = request.body.date;
   // const price = request.body.price;
+<<<<<<< HEAD
   console.log('City works?', request.body.city)
   db.searchAllEvents(date, categories, price)
+=======
+  if (city === '') {
+    city = 'San Francisco';
+  } else {
+    db.searchEventsByCity(city).then((cityEvents)=>{
+      if (cityEvents.length === 0){
+        //Do API call for city
+      } else {
+        //We know we already have it in our DB, serve it from db
+        db.searchAllEvents(date, categories, price, city)
+        .then((data) => {
+          response.json(data);
+        });
+      }
+
+    })
+  }
+  db.searchAllEvents(date, categories, price, city)
+>>>>>>> Got refreshing to work properly by using raw psql WHERE NOT EXISTS
     .then((data) => {
       response.json(data);
     });
