@@ -36,7 +36,7 @@ class EventListContainer extends React.Component {
 		        <Button onClick={this.toggleVisibility}>Weekend Events</Button>
 		        <Sidebar.Pushable as={Segment}>
 		          <Sidebar
-		            as={Menu} 					//as -> Sidebar controls logic of sliding out and in.  as refers to WHAT element is sliding in and out
+		            as={Menu} 					//  as -> Sidebar controls logic of sliding out and in.  as refers to WHAT element is sliding in and out
 		            animation='overlay'
 		            width='wide'
 		            direction='right'

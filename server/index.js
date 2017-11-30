@@ -112,7 +112,7 @@ app.post('/filter', (request, response) => {
   const categories = request.body.category;
   // const date = request.body.date;
   // const price = request.body.price;
-
+  console.log('City works?', request.body.city)
   db.searchAllEvents(date, categories, price)
     .then((data) => {
       response.json(data);

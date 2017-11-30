@@ -1,5 +1,6 @@
 import React from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
+const Promise = require('bluebird');
 
 class CitySearch extends React.Component {
   constructor(props) {
@@ -11,14 +12,19 @@ class CitySearch extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({ city: event.target.value });
+    new Promise((resolve, reject) => {
+      this.setState({ 'city': event.target.value });
+      resolve();
+    }).then(() => {
+      this.props.onChange('city', this.state.city);
+    });
   }
   render() {
     return (
       <input
         className="city-search"
-        onChange={this.handleChange}
         value={this.state.city}
+        onChange={this.handleChange}
         placeholder="Enter a City"
       />
     );
