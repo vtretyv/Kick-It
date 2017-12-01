@@ -92,10 +92,6 @@ module.exports = {
     });
   },
 
-  // Promise.resolve(knex.raw(`INSERT INTO events (id, name, description, venue_id, price, url, city, image_url, start_datetime, end_datetime, category_id) VALUES ('${event.id}', ${event.name}, ${event.description}, '${event.venue_id}', '${event.price}', '${event.url}', '${event.city}', '${event.image_url}', '${event.start_datetime}', '${event.end_datetime}', '${event.category_id}')`)).then( (results) => {
-  //   resolve(results);
-  // })
-
   getTodaysEvents: (city = 'San Francisco') => {
     const todayStart = moment().startOf('day').format();
     const todayEnd = moment().endOf('day').format();
@@ -158,27 +154,6 @@ module.exports = {
 
 }
 
-// searchAllEvents: (date, categories, price) => {
-//   const dayStart = moment(date).startOf('day').format();
-//   const dayEnd = moment(date).endOf('day').format();
-//   const priceVal = price !== 'all' ? `('${price}')` : `('paid', 'free')` ;
-//   let query;
-//   if ( categories.length > 0 ) {   
-//     let categoryList = categories.join('\',\'')
-//     categoryList = "'" + categoryList + "'"
-//     query = `SELECT e.*, c.name AS category_name FROM events AS e JOIN categories AS c ON e.category_id = c.id WHERE e.price IN ${priceVal} AND e.start_datetime BETWEEN '${dayStart}' AND '${dayEnd}' AND c.shortname IN (${categoryList})`;
-//   } else {
-//     query = `SELECT e.*, c.name AS category_name FROM events AS e JOIN categories AS c ON e.category_id = c.id WHERE e.price IN ${priceVal} AND e.start_datetime BETWEEN '${dayStart}' AND '${dayEnd}'`;
-//   }
-//   return new Promise( (resolve, reject) => {
-//     resolve(knex.raw(query).catch( (err) => {
-//         console.log('Error occurred finding events: ');
-//       })
-//     )
-//   }).catch((err) => {
-//     throw err;
-//   });
-// },
 
 //==========================================================================================
 //                    Categories Table

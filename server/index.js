@@ -57,7 +57,6 @@ app.get('/initialLoad', (req, res) => {
           resolve(getCalls());
         } else {
           currentCity = city;
-          // console.log('Data length in get calls function', eventBriteData.length);
           resolve(eventBriteData);
         }
       } else {
@@ -139,11 +138,8 @@ app.post('/filter', (request, response) => {
   const categories = request.body.category;
   let city = request.body.city;
   city = city.toLowerCase();
-  // const date = request.body.date;
-  // const price = request.body.price;
   console.log('City works?', request.body.city)
   if (city === '') {
-    // console.log('in the /filter if');
     city = 'San Francisco';
     db.searchAllEvents(date, categories, price, city)
       .then((data) => {
@@ -154,22 +150,15 @@ app.post('/filter', (request, response) => {
     db.searchEventsByCity(city).then((cityEvents)=>{
       console.log('in the filter else then');
       console.log('city', city);
-      // console.log('City Events in the filter db query', cityEvents);
       if (cityEvents.rows.length === 0) {
         //Do API call for city
         console.log('There are no events for city in the db');
         getEvents.cityApi(city, 5).then((cityEvents)=>{
           console.log('in the then of cityApi');
-          // console.log('city events for new city', cityEvents);
-          // console.log('typeof cityEvents', typeof cityEvents);
-          // let parsedEvents = JSON.parse(cityEvents).events;
           let parsedEvents = cityEvents;
           
-          // console.log('RAW DATA', JSON.parse(cityEvents));
-          // console.log('PARSED EVENTS', parsedEvents);
           let massagedData = [];
           parsedEvents.forEach((event) => {massagedData.push(dataMassager(event, city)); });
-          // console.log('massaged data after massage', massagedData);
           db.addEvents(massagedData).then(() => {
             console.log('Massaged Data added to the db');
             console.log('DATE of filter:', date);
