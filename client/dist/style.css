@@ -42,30 +42,6 @@ img {
   width: 152px;
 }
 
-/*.toolPie {
-  position: absolute;           
-  top: 160px;
-  left: 140px;
-  width: 140px;
-  height: 10px;
-  text-align: center;
-  padding: 20px;             
-  margin: 10px;
-  font: 12px sans-serif;        
-  background: black;   
-  border: 1px;      
-  border-radius: 2px;           
-  pointer-events: none;
-  transition: 0.5s;
-  opacity: 0;
-  visibility: hidden; 
-}
-
-.toolPie.show {
-  opacity: 0.9;
-  transition-duration: 6000ms;
-  visibility: visible; 
-}*/
 
 .toolPie {
   position: absolute;           
@@ -114,38 +90,6 @@ img {
   text-align: top; 
 }
 
-/*.toolUS {
-  position: absolute;  
-  top: 160px;
-  left: 140px;
-  width: 140px;
-  height: 10px;         
-  text-align: center;
-  padding: 20px;             
-  margin: 10px;
-  font: 12px sans-serif;        
-  background: black;   
-  border: 1px;      
-  border-radius: 2px;           
-  pointer-events: none;
-  transition: 0.5s;
-  opacity: 0;
-  visibility: visible; 
-}
-
-.toolUS span {
-  opacity: 0.9;
-  transition-duration: 60ms;
-  visibility: visible; 
-}*/
-
-/*.toolUS:hover span {
-  opacity: 0.9;
-  transition-duration: 6000ms;
-  visibility: visible; 
-  position: fixed;
-}*/
-
 .state{
   fill: lightsteelblue;
   stroke: darkblue;
@@ -160,6 +104,12 @@ img {
 .States {
   width: 960px;
   height: 600px;
+  margin-left: -150px;
+}
+
+.Counties {
+  width: 960px;
+  height: 600px;
 }
 
 .Piechart {
@@ -167,10 +117,28 @@ img {
   height: 600px;
 }
 
-.container {
-  position: relative;
-}
 
 .label {
   position: absolute;
+}
+
+.labelLines {
+  fill: red;
+  stroke: #a9a9a9;
+  stroke-width: 1;
+}
+
+.pie {
+  float: left
+}
+
+.map {
+  width: 700px;
+  height: 600px;
+  float: left;
+  margin-left: 10px;
+}
+
+.charts {
+  display: inline-block;
 }

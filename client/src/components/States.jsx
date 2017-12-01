@@ -4,8 +4,8 @@ import { interpolate } from 'd3-interpolate';
 import stateData from '../../../lib/stateData.js';
 import $ from 'jquery';
 
-const width = 300;
-const height = 300;
+const width = 700;
+const height = 700;
 
 function tooltipHtml(n, d){ /* function to create html content string in tooltip div. */
     return "<h4>"+n+"</h4><table>"+
@@ -16,6 +16,7 @@ function tooltipHtml(n, d){ /* function to create html content string in tooltip
   }
 
 const sampleData = {};
+
 const states = ['HI', 'AK', 'FL', 'SC', 'GA', 'AL', 'NC', 'TN', 'RI', 'CT', 'MA',
   'ME', 'NH', 'VT', 'NY', 'NJ', 'PA', 'DE', 'MD', 'WV', 'KY', 'OH',
   'MI', 'WY', 'MT', 'ID', 'WA', 'DC', 'TX', 'CA', 'AZ', 'NV', 'UT',
@@ -39,19 +40,15 @@ function dataReturn(state) {
   return state.d;
 }
 
-const ToolTipState = ({ data }) => {
-  // console.log(`tool tip state is being called: ${JSON.stringify(data, null, 2)}`);
-    // return (
-    // <div>
-    //   <span className={componentClasses.join(' ')}>
-    //     {`${data.name}`}
-    //   </span>
-    // </div>);
+
+const ToolTipUS = ({ data }) => {
+  console.log('sample data: ', sampleData[data.id]);
   return (
-    <div>
-      <span className="toolUS">
-        <p>{`${data.name.toUpperCase()}`}!</p>
-      </span>
+    <div className="toolUS">
+      <div>{`${data.name}`}</div>
+      <div>{`City ${sampleData[data.id].low}`}</div>
+      <div>{`City: ${sampleData[data.id].high}`}</div>
+      <div>{`City: ${sampleData[data.id].avg}`}</div>
     </div>);
 };
 
@@ -79,7 +76,7 @@ class States extends Component {
     // console.log(`Welcome to ${d.n}!`);
     this.setState({
       hover: true,
-      selection: { name: data.n }
+      selection: {name: d.n, id: d.id}
     });
   }
 
@@ -109,9 +106,9 @@ class States extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div>{this.state.hover === true && <ToolTipState data={this.state.selection} />}</div>
-        <svg className="States" width={width} height={height} >
+      <div className="map">
+        <div>{this.state.hover === true && <ToolTipUS data={this.state.selection} />}</div>
+        <svg className="States"  transform="scale(0.6)">
             {stateData.map(state => {
               return (
                 <path

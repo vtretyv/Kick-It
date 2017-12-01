@@ -6,6 +6,7 @@ import EventListContainer from './components/EventListContainer.jsx';
 import EventMap from './components/EventMap.jsx';
 import Piechart from './components/Piechart.jsx';
 import States from './components/States.jsx';
+import Counties from './components/Counties.jsx';
 
  // 103   | music         | Music
  // 110   | food          | Food & Drink
@@ -176,6 +177,7 @@ class App extends React.Component {
 				console.log('ERROR getting weekend from filter post', err);
 			})
 		})
+  }
 
 
 	render() {
@@ -200,8 +202,9 @@ class App extends React.Component {
 				<div className="album text-muted">
 					<div className="container">
             <div>
-              <States />
               <Piechart data={this.state.d3Data} />
+              <States />
+              <Counties />
             </div>
 						<EventListContainer 
 							featuredEvents={this.state.featured}
@@ -209,20 +212,19 @@ class App extends React.Component {
 						/>
 					</div>
 					<div>
-					<br />
-					<EventMap
-						venues={this.state.venueLocations}
-            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
-            loadingElement={<div style={{ height: `100%` }} />}
-            containerElement={<div style={{ height: `500px` }} />}
-            mapElement={<div style={{ height: `100%` }} />}
-          />
+  					<br />
+  					<EventMap
+  						venues={this.state.venueLocations}
+              googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
+              loadingElement={<div style={{ height: `100%` }} />}
+              containerElement={<div style={{ height: `500px` }} />}
+              mapElement={<div style={{ height: `100%` }} />}
+            />
 					</div>
 				</div>
 				
-			</div>
-		)
+			</div>)
 	}
-
+}
 
 ReactDOM.render(<App />, document.getElementById('app'));
