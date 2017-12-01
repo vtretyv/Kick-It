@@ -11,7 +11,7 @@ const Promise = require('bluebird');
 const PORT = process.env.PORT || 3000;
 const moment = require('moment');
 const {
-  APIKEY,
+  // APIKEY,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
 } = require('../config.js');
@@ -48,19 +48,17 @@ app.use(session({ secret: 'chadam' }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// ======================================================================
+//                    Gathering massive data from EventBrite
+// ======================================================================
+
+const { getCityData } = require('../sampleData/getCityData.js');
+
+getCityData();
 
 // ======================================================================
 //                    User login to Google
 // ======================================================================
-
-// app.get(
-//   '/auth/google',
-  // (req, res, next) => {
-  //   console.log('login endpoint is working!');
-  //   next();
-  // },
-//   passport.authenticate('google', { scope: ['profile', 'email'] })
-// );
 
 app.get('/auth/google',
   (req, res, next) => {
@@ -99,7 +97,7 @@ const db = require('../database/index.js');
 app.get('/initialLoad', (req, res) => {
   const responseObj = {};
   let eventBriteData = [];
-  //2017-12-19T17:09:28-08:00
+  // 2017-12-19T17:09:28-08:00
   const monthOptions = {
     method: 'GET',
     url: 'https://www.eventbriteapi.com/v3/events/search/',

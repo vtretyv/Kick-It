@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { min, max } from 'd3-array';
 import { interpolate } from 'd3-interpolate';
 import stateData from '../../../lib/stateData.js';
+import $ from 'jquery';
 
 const width = 300;
 const height = 300;
@@ -38,11 +39,28 @@ function dataReturn(state) {
   return state.d;
 }
 
-const ToolTipUS = ({ data }) => {
+const ToolTipState = ({ data }) => {
+  // console.log(`tool tip state is being called: ${JSON.stringify(data, null, 2)}`);
+    // return (
+    // <div>
+    //   <span className={componentClasses.join(' ')}>
+    //     {`${data.name}`}
+    //   </span>
+    // </div>);
   return (
-    <div className="toolUS">
-      <div>{`${data.name}`}</div>
+    <div>
+      <span className="toolUS">
+        <p>{`${data.name.toUpperCase()}`}!</p>
+      </span>
     </div>);
+};
+
+const ToolTipPie = ({ data }) => {
+  // const componentClasses = ['toolPie'];
+  // if (data) { componentClasses.push('show'); }
+  return (
+    <div className="toolPie">{`${data.label} ${data.value}`}</div>
+  );
 };
 
 
@@ -51,27 +69,48 @@ class States extends Component {
     super(props);
     this.state = {
       hover: false,
-      selection: {}
+      selection: {},
+      // mouseX: 0,
+      // mouseY: 0,
     };
   }
 
-  mouseEnterEvent(d) {
-    console.log('HERERE O');
+  mouseEnterEvent(data) {
+    // console.log(`Welcome to ${d.n}!`);
     this.setState({
       hover: true,
-      selection: {name: d.n}
+      selection: { name: data.n }
     });
   }
 
-  mouseLeaveEvent() {
-    console.log('HERERE 4');
+  mouseLeaveEvent(data) {
+    // console.log(`Farewell, ${d.n}!`);
     this.setState({
-      hover: false
+      hover: false,
     });
+  }
+
+  mouseMoveEvent(data, e) {
+    console.log('mouse has moved!', e.clientX);
+    // this.setState({
+    //   mouseX: e.clientX,
+    //   mouseY: e.clientY
+    // }, () => {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      const toolTipUS = document.getElementsByClassName('toolUS');
+      // console.log('toolTipUS: ', typeof toolTipUS, Array.isArray(toolTipUS), toolTipUS[0]);
+      toolTipUS[0].style.top = (mouseY - 200) + 'px';
+      toolTipUS[0].style.left = (mouseX - 300) + 'px';
+       console.log(`mouse is at: (${mouseX}, ${mouseY})`);
+      // console.log(`mouse is at: (${this.state.mouseX}, ${this.state.mouseY})`);
+    // });
   }
 
   render() {
     return (
+      <div className="container">
+        <div>{this.state.hover === true && <ToolTipState data={this.state.selection} />}</div>
         <svg className="States" width={width} height={height} >
             {stateData.map(state => {
               return (
@@ -80,11 +119,13 @@ class States extends Component {
                   key={state.id}
                   d={dataReturn(state)}
                   onMouseEnter={(e) => { this.mouseEnterEvent(state, e); }}
-                  onMouseLeave={() => { this.mouseLeaveEvent(); }}
+                  onMouseLeave={(e) => { this.mouseLeaveEvent(state, e); }}
+                  onMouseMove={(e) => { this.mouseMoveEvent(state, e); }}
                 ></path>
               );
             })}
-        </svg>);
+        </svg>
+      </div>);
   }
 }
 
