@@ -46,3 +46,6 @@ const getLatLong = (arr) => {
 };
 
 const savedLocations = getLatLong(places);
+
+//get locations from API
+//https://www.eventbriteapi.com/v3/venues/15304516/?token=5IBV7MPE324H46CPUATD
