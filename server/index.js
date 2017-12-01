@@ -11,7 +11,7 @@ const Promise = require('bluebird');
 const PORT = process.env.PORT || 3000;
 const moment = require('moment');
 const {
-  APIKEY,
+  // APIKEY,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
 } = require('../config.js');
@@ -52,26 +52,13 @@ app.use(passport.session());
 //                    Gathering massive data from EventBrite
 // ======================================================================
 
-const fs = require('fs');
-const csvWriter = require('csv-write-stream');
+const { getCityData } = require('../sampleData/getCityData.js');
 
-// const writer = csvWriter({ headers: ["hello", "foo"] });
-// writer.pipe(fs.createWriteStream('sampleData/test.csv'));
-// writer.write(['world', 'bar']);
-// writer.end();
+getCityData();
 
 // ======================================================================
 //                    User login to Google
 // ======================================================================
-
-// app.get(
-//   '/auth/google',
-  // (req, res, next) => {
-  //   console.log('login endpoint is working!');
-  //   next();
-  // },
-//   passport.authenticate('google', { scope: ['profile', 'email'] })
-// );
 
 app.get('/auth/google',
   (req, res, next) => {
@@ -110,7 +97,7 @@ const db = require('../database/index.js');
 app.get('/initialLoad', (req, res) => {
   const responseObj = {};
   let eventBriteData = [];
-  //2017-12-19T17:09:28-08:00
+  // 2017-12-19T17:09:28-08:00
   const monthOptions = {
     method: 'GET',
     url: 'https://www.eventbriteapi.com/v3/events/search/',
@@ -127,36 +114,10 @@ app.get('/initialLoad', (req, res) => {
     },
   };
 
-  const largeDataWriter = csvWriter({ 
-    headers: ["id", "location", "name", "timezone", "starttime", "category"],
-  });
-  largeDataWriter.pipe(fs.createWriteStream('sampleData/test.csv'));
-  largeDataWriter.write(['world', 'bar']);
-  
-
   const getCalls = () => new Promise((resolve, reject) => {
     request(monthOptions, (error, response, body) => {
       const page = JSON.parse(body).pagination.page_number;
       const parsedEvents = JSON.parse(body).events;
-      // console.log(JSON.stringify(parsedEvents, null, 2));
-      // let chadamEBData = parsedEvents.map((event) => {
-      parsedEvents.forEach((event) => {
-          let saveEvent = [
-            event.id,
-            monthOptions.qs['location.address'],
-            event.name.text,
-            // url: event.url,
-            event.start.timezone,
-            event.start.utc,
-            event.category_id,
-            event.subcategory_id,
-          ];
-        largeDataWriter.write(saveEvent);
-      });
-      // console.log('events being inserted: ', chadamEBData.length);
-      // console.log('example: ', chadamEBData[0][2]);
-      // console.log(`data being inserted: ${JSON.stringify(chadamEBData, null, 2)}`);
-      // largeDataWriter.write(chadamEBData);
       if (!error) {
         eventBriteData = eventBriteData.concat(parsedEvents);
         if (page < 5) {
