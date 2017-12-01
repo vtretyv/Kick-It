@@ -136,30 +136,8 @@ app.get('/initialLoad', (req, res) => {
     });
   });
 
-  // const getCallsForCity = (city) => new Promise((resolve, reject) => {
-  //   request(monthOptions, (error, response, body) => {
-  //     const page = JSON.parse(body).pagination.page_number;
-  //     const parsedEvents = JSON.parse(body).events;
-  //     let city = JSON.parse(body).location.augmented_location.city;
-  //     if (!error) {
-  //       eventBriteData = eventBriteData.concat(parsedEvents);
-  //       if (page < 5) {
-  //         monthOptions.qs.page += 1;
-  //         resolve(getCalls());
-  //       } else {
-  //         currentCity = city;
-  //         // console.log('Data length in get calls function', eventBriteData.length);
-  //         resolve(eventBriteData);
-  //       }
-  //     } else {
-  //       reject(error);
-  //     }
-  //   });
-  // });
-
   getCalls()
     .then(temp =>
-
       temp.map((event) => {
         const imageUrl = event.logo ? event.logo.url : 'https://cdn.evbstatic.com/s3-build/perm_001/f8c5fa/django/images/discovery/default_logos/4.png';
         const catID = event.subcategory_id === 17001 ? event.subcategory_id : event.category_id;
@@ -181,7 +159,8 @@ app.get('/initialLoad', (req, res) => {
           day: moment(event.start.local).format('dddd'),
         };
       })
-    ).then((formattedEvents) => {
+    )
+    .then((formattedEvents) => {
       db.addEvents(formattedEvents)
         .then(() => {
           db.getTodaysEvents()
@@ -199,14 +178,6 @@ app.get('/initialLoad', (req, res) => {
           });
       });
     });
-    // .then(() =>{
-    //   db.searchEventsByCity('San Francisco').then((cityEvents) =>{
-    //     console.log('in the search events by city then');
-    //     // console.log('CityEvents', cityEvents);
-    //   }).catch((err)=>{
-    //     console.log('Error fetching events for San Francisco Hardcoded')
-    //   });
-    // });
 });
 
 let dataMassager = (event, city)=>{
@@ -260,7 +231,7 @@ app.post('/filter', (request, response) => {
         console.log('There are no events for city in the db');
         getEvents.cityApi(city, 5).then((cityEvents)=>{
           console.log('in the then of cityApi');
-          console.log('city events for new city', cityEvents);
+          // console.log('city events for new city', cityEvents);
           // console.log('typeof cityEvents', typeof cityEvents);
           // let parsedEvents = JSON.parse(cityEvents).events;
           let parsedEvents = cityEvents;
@@ -278,32 +249,15 @@ app.post('/filter', (request, response) => {
                 response.status(200);
                 response.json(data);
               })
-            // res.redirect(307, '');
-            // db.getTodaysEvents(city)
-            //   .then((data) => {
-            //     console.log('in the then of get today events in /filter');
-            //     let responseObj = {};
-            //     // responseObj.today = data;
-            //     response.status(200);
-            //     response.json(data);
-            //   })
               .catch((err) => {
                 console.log('Error getting todays events after db seeding', err);
-              })
+              });
           })
-          // .then(() => {
-          //   app.get('/weekend'+'/'+city, (req, res) => {
-          //     getEvents.weekend(city)
-          //       .then((data) => {
-          //         res.json(data);
-          //       });
-          //   });
-          // })
             .catch((err) => {
               console.log('Error thrown while inserting massaged data into db');
             });
-        });
-      } else {
+          });
+        } else {
         //We know we already have it in our DB, serve it from db
         console.log('There are events for the city in the db');
         db.searchAllEvents(date, categories, price, city)
@@ -311,15 +265,25 @@ app.post('/filter', (request, response) => {
           response.json(data);
         });
       }
-
+      
     }).catch((err)=>{
       console.log('Error in the filter searchEventsByCity')
     })
   }
-  // db.searchAllEvents(date, categories, price, city)
-  //   .then((data) => {
-  //     response.json(data);
-  //   });
+
+app.post('/weekend', (req, res) => {
+  console.log('req.body', req.body);
+  console.log('req.body.city', req.body.city);
+  
+  getEvents.weekend(req.body.city.toLowerCase())
+    .then((data) => {
+      console.log('WEEKEND DATA FROM POST:', data);
+      console.log('typeof data', typeof data);
+      res.status(200);
+      res.json(data);
+    });
+});
+
 });
 
 

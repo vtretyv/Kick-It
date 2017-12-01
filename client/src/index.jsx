@@ -135,6 +135,30 @@ class App extends React.Component {
 					featured: events.today.rows
 				})
 			}	
+		}).then(()=>{
+			fetch('/weekend', {
+				headers: {
+					//'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+				body: JSON.stringify({'city':filters.city}),
+			})
+			.then((res) => {
+				console.log('RESPONSE in weekend POST:', res);
+				return res.json();
+			})
+			.then((data) => {
+				console.log('data about to be put into weekend state: ' , data);
+				console.log('typeof data about to be put into weekend state:', typeof data);
+				let events = JSON.parse(data).events;
+				this.setState({
+					weekend: events,
+				});
+			})
+			.catch((err)=>{
+				console.log('ERROR getting weekend from filter post', err);
+			})
 		})
 		// .then(() => {
 		// 	fetch(`/weekend/${}`)
