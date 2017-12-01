@@ -2,18 +2,8 @@ import React, { Component } from 'react';
 import { min, max } from 'd3-array';
 import { interpolate } from 'd3-interpolate';
 import stateData from '../../../lib/stateData.js';
+import _ from 'underscore';
 import $ from 'jquery';
-
-const width = 700;
-const height = 700;
-
-function tooltipHtml(n, d){ /* function to create html content string in tooltip div. */
-    return "<h4>"+n+"</h4><table>"+
-      "<tr><td>Low</td><td>"+(d.low)+"</td></tr>"+
-      "<tr><td>Average</td><td>"+(d.avg)+"</td></tr>"+
-      "<tr><td>High</td><td>"+(d.high)+"</td></tr>"+
-      "</table>";
-  }
 
 const sampleData = {};
 
@@ -28,10 +18,14 @@ states.forEach((d) => {
   const mid = Math.round(100 * Math.random());
   const high = Math.round(100 * Math.random());
   sampleData[d] = {
-    low: min([low, mid, high]),
-    high: max([low, mid, high]),
-    avg: Math.round((low + mid + high) / 3),
-    color: interpolate('#ffffcc', '#800026')(low / 100)
+    Music: Math.round(100 * Math.random()),
+    Food: Math.round(100 * Math.random()),
+    Community: Math.round(100 * Math.random()),
+    Dating: Math.round(100 * Math.random()),
+    Entertainment: Math.round(100 * Math.random()),
+    Science: Math.round(100 * Math.random()),
+    AutoBoatAir: Math.round(100 * Math.random()),
+    active: Math.round(100 * Math.random())
   };
 });
 
@@ -42,23 +36,21 @@ function dataReturn(state) {
 
 
 const ToolTipUS = ({ data }) => {
-  console.log('sample data: ', sampleData[data.id]);
   return (
     <div className="toolUS">
       <div>{`${data.name}`}</div>
-      <div>{`City ${sampleData[data.id].low}`}</div>
-      <div>{`City: ${sampleData[data.id].high}`}</div>
-      <div>{`City: ${sampleData[data.id].avg}`}</div>
+      {_.map(sampleData[data.id], (value, label) => {
+        return (<div>{label}: {value}</div>);
+      })}
     </div>);
 };
 
-const ToolTipPie = ({ data }) => {
-  // const componentClasses = ['toolPie'];
-  // if (data) { componentClasses.push('show'); }
-  return (
-    <div className="toolPie">{`${data.label} ${data.value}`}</div>
-  );
-};
+
+function formatDataForPie(id) {
+  return _.map(sampleData[id], (value, label) => {
+    return { label: label, value: value };
+  });
+}
 
 
 class States extends Component {
@@ -72,16 +64,16 @@ class States extends Component {
     };
   }
 
-  mouseEnterEvent(data) {
-    // console.log(`Welcome to ${d.n}!`);
+
+  mouseEnterEvent(d) {
     this.setState({
       hover: true,
       selection: {name: d.n, id: d.id}
     });
   }
 
-  mouseLeaveEvent(data) {
-    // console.log(`Farewell, ${d.n}!`);
+
+  mouseLeaveEvent() {
     this.setState({
       hover: false,
     });
@@ -89,19 +81,12 @@ class States extends Component {
 
   mouseMoveEvent(data, e) {
     console.log('mouse has moved!', e.clientX);
-    // this.setState({
-    //   mouseX: e.clientX,
-    //   mouseY: e.clientY
-    // }, () => {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
-      const toolTipUS = document.getElementsByClassName('toolUS');
-      // console.log('toolTipUS: ', typeof toolTipUS, Array.isArray(toolTipUS), toolTipUS[0]);
-      toolTipUS[0].style.top = (mouseY - 200) + 'px';
-      toolTipUS[0].style.left = (mouseX - 300) + 'px';
-       console.log(`mouse is at: (${mouseX}, ${mouseY})`);
-      // console.log(`mouse is at: (${this.state.mouseX}, ${this.state.mouseY})`);
-    // });
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    const toolTipUS = document.getElementsByClassName('toolUS');
+    toolTipUS[0].style.top = (mouseY - 200) + 'px';
+    toolTipUS[0].style.left = (mouseX - 300) + 'px';
+    // console.log(`mouse is at: (${mouseX}, ${mouseY})`);
   }
 
   render() {
@@ -112,12 +97,15 @@ class States extends Component {
             {stateData.map(state => {
               return (
                 <path
+                  stroke="red"
+                  fill="#d89e9e"
                   className="state"
                   key={state.id}
                   d={dataReturn(state)}
                   onMouseEnter={(e) => { this.mouseEnterEvent(state, e); }}
-                  onMouseLeave={(e) => { this.mouseLeaveEvent(state, e); }}
                   onMouseMove={(e) => { this.mouseMoveEvent(state, e); }}
+                  onMouseLeave={() => { this.mouseLeaveEvent(); }}
+                  onClick={ () => { this.props.selectPieData(formatDataForPie(state.id)); }}
                 ></path>
               );
             })}
@@ -128,5 +116,14 @@ class States extends Component {
 
 export default States;
 
-//       <div>{this.state.hover === true && <ToolTipUS data={this.state.selection} />}</div>
 
+// [
+//       { label: 'music', category: [103], value: music },
+//       { label: 'food', category: [110], value: food },
+//       { label: 'community', category: [113, 116], value: community },
+//       { label: 'dating', category: [17001], value: dating },
+//       { label: 'entertainment', category: [104, 105], value: entertainment },
+//       { label: 'science', category: [102], value: science },
+//       { label: 'autoBoatAir', category: [118], value: autoBoatAir },
+//       { label: 'active', category: [108, 109], value: active }
+//     ]

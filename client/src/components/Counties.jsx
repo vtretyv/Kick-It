@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { min, max } from 'd3-array';
 import { interpolate } from 'd3-interpolate';
-import stateData from '../../../lib/countyData.js';
-
-const width = 700;
-const height = 700;
+import countyData from '../../../lib/countyData.js';
 
 
 function dataReturn(state) {
@@ -41,18 +38,31 @@ class States extends Component {
     });
   }
 
+
+  // use d3 interpolate!
+  colorSelector(label) {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
   render() {
     return (
       <div className="map">
         <div>{this.state.hover === true && <ToolTipUS data={this.state.selection} />}</div>
-        <svg className="Counties">
-            {stateData.map(state => {
+        <svg className="Counties" transform="scale(1)">
+            {countyData.map(county => {
               return (
                 <path
+                  stroke={this.colorSelector(county.label)}
+                  fill={this.colorSelector(county.label)}
                   className="state"
-                  key={state.id}
-                  d={dataReturn(state)}
-                  onMouseEnter={(e) => { this.mouseEnterEvent(state, e); }}
+                  key={county.id}
+                  d={dataReturn(county)}
+                  onMouseEnter={(e) => { this.mouseEnterEvent(county, e); }}
                   onMouseLeave={() => { this.mouseLeaveEvent(); }}
                 ></path>
               );

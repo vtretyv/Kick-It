@@ -7,6 +7,7 @@ import EventMap from './components/EventMap.jsx';
 import Piechart from './components/Piechart.jsx';
 import States from './components/States.jsx';
 import Counties from './components/Counties.jsx';
+const { RAWAPI } = require('../../config.js');
 
  // 103   | music         | Music
  // 110   | food          | Food & Drink
@@ -21,9 +22,6 @@ import Counties from './components/Counties.jsx';
  // 109   | active        | Active
 
 
-const { RAWAPI } = require('../../config.js');
-
-
 class App extends React.Component {
 	constructor() {
 		super();
@@ -32,10 +30,15 @@ class App extends React.Component {
 			weekend: [],
 			isLoggedIn: false,
       userFirstName: '',
-      d3Data: [],
 			venueLocations: [],
+      PieData: [],
+      StatesData: {},
+      CountiesData: {}
 		}
+
+    this.selectPieData = this.selectPieData.bind(this);
 	}
+
 	componentDidMount() {
 		fetch('/initialLoad')
 			.then((response) => {
@@ -48,7 +51,7 @@ class App extends React.Component {
         const d3Data = this.createD3Data(data.today);
 				this.setState({
           featured: data.today,
-          d3Data: d3Data
+          PieData: PieData
 				})
 				return data;
 			})
@@ -92,6 +95,7 @@ class App extends React.Component {
 			});
 		});
 	}
+
 
   createD3Data(raw) {
     let music = 0;
@@ -139,6 +143,7 @@ class App extends React.Component {
     return d3Data;
   }
 
+
 	runFilters(filters) {
 		fetch('/filter', {
 			headers: {
@@ -180,6 +185,13 @@ class App extends React.Component {
   }
 
 
+  selectPieData(data) {
+    this.setState({
+      PieData: data
+    })
+  }
+
+
 	render() {
 		return (
 			<div>
@@ -198,13 +210,15 @@ class App extends React.Component {
             </div>
            }
         </div>
-				<SearchBarContainer runFilters={this.runFilters.bind(this)}/>
-				<div className="album text-muted">
-					<div className="container">
-            <div>
-              <Piechart data={this.state.d3Data} />
-              <States />
-              <Counties />
+        <SearchBarContainer runFilters={this.runFilters.bind(this)}/>
+        <div className="album text-muted">
+            <div className="charts">
+              <Piechart data={this.state.PieData} />
+              <States 
+                data={this.state.StatesData}
+                selectPieData={this.selectPieData}
+              />
+              <Counties data={this.state.CountiesData} />
             </div>
 						<EventListContainer 
 							featuredEvents={this.state.featured}
@@ -220,10 +234,9 @@ class App extends React.Component {
               containerElement={<div style={{ height: `500px` }} />}
               mapElement={<div style={{ height: `100%` }} />}
             />
-					</div>
 				</div>
-				
-			</div>)
+			</div>
+      )
 	}
 }
 

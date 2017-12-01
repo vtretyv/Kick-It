@@ -56,6 +56,7 @@ class Piechart extends Component {
     };
   }
 
+
   mouseOverEvent(d, e) {
     this.setState({
       hover: true,
@@ -85,9 +86,9 @@ class Piechart extends Component {
               const cx = center[0];
               const cy = center[1];
               const h = Math.sqrt((cx * cx) + (cy * cy));
-              const labelRadius = 60;
-              console.log(`center = ${cx}, ${cy} with a hypotenuse of ${h}`);
-              const labelPosition = [((cx / h) * labelRadius), ((cy / h) * labelRadius)];
+              const labelRadius = 230;
+              const labelPosition1 = [((cx / h) * labelRadius), ((cy / h) * labelRadius)];
+              const labelPosition2 = [((cx / h) * (labelRadius+30)), ((cy / h) * (labelRadius+30))];
 
               return (<g key={i} className="arc">
                 <path
@@ -96,11 +97,11 @@ class Piechart extends Component {
                   onMouseOver={(e) => { this.mouseOverEvent(d, e); }}
                   onMouseLeave={() => { this.mouseLeaveEvent(); }}
                 />
-                <path fill="red" d={labelPath(center, labelPosition)} />
+                <path fill="red" stroke="red" d={labelPath(center, labelPosition1)} />
                 <text
                   className="label"
                   dy=".15em"
-                  transform={`translate(${labelPosition})`}
+                  transform={`translate(${(i%2) ? labelPosition1 : labelPosition2})`}
                 >
                   {d.value !== 0 && d.data.label}
                 </text>
