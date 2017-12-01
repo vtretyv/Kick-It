@@ -111,6 +111,7 @@ class App extends React.Component {
     return d3Data;
   }
 
+
 	runFilters(filters) {
 		fetch('/filter', {
 			headers: {
@@ -149,8 +150,6 @@ class App extends React.Component {
 				return res.json();
 			})
 			.then((data) => {
-				console.log('data about to be put into weekend state: ' , data);
-				console.log('typeof data about to be put into weekend state:', typeof data);
 				let events = JSON.parse(data).events;
 				this.setState({
 					weekend: events,
@@ -160,9 +159,7 @@ class App extends React.Component {
 				console.log('ERROR getting weekend from filter post', err);
 			})
 		})
-		// .then(() => {
-		// 	fetch(`/weekend/${}`)
-		// })
+
 	}
 
   render() {
