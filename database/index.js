@@ -10,6 +10,9 @@ const Promise = require('bluebird');
 const categoryList = require('../category_map.json');
 const moment = require('moment');
 
+const fs = require('fs')
+const copyFrom = require('pg-copy-streams').from
+
 
 knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
   knex.raw('CREATE DATABASE kickit;').then( () => {
@@ -30,6 +33,37 @@ knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
         table.string('shortname');
         table.string('name');
       }).then(() => {
+        console.log('creating d3data table');
+        knex.schema.createTable('d3data', (table) => {
+          table.string('id').primary();
+          table.string('location');
+          table.string('name');
+          table.string('url');
+          table.string('timezone');
+          table.string('starttime');
+          table.string('category');
+          table.string('subcategory');
+          table.string('free?');
+        }).then( () => {
+        // knex.raw(`DROP TABLE IF EXISTS categories;`).then( () => {
+            // Promise.resolve(knex.raw(`COPY d3data FROM 'testdata.csv' WITH (FORMAT csv);`))
+            Promise.resolve(() => {
+              console.log('starting to copy data from .csv');
+              // knex.client.pool.acquire(function(err, client){
+              //   const done = (err) => {
+              //     console.log('done copying data from .csv into d3data');
+              //     connection.client.pool.release(client)
+              //     if (err) console.log(err)
+              //     else console.log('success')
+              //   }
+              //   var stream = client.query(copyFrom('COPY d3data FROM STDIN'))
+              //   var fileStream = fs.createReadStream('testdata.csv');
+              //   fileStream.on('error', done)
+              //   fileStream.pipe(stream).on('finish', done).on('error', done)
+              // })
+            })
+         
+          .then( () => {
         console.log('Inserting values to categories table..');
         Promise.resolve(addCategories(categoryList)).then(() => {
           knex.raw(`DROP TABLE IF EXISTS events;`).then(() => {
@@ -51,13 +85,15 @@ knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
               table.foreign('category_id').references('categories.id');
             }).catch((err) => { console.log(err); });
           });
-        // })
-          // })
+        })
+          })
         });
       });
     });
   });
 });
+
+
 
 //==========================================================================================
 //                    Events Table
@@ -94,8 +130,8 @@ module.exports = {
   },
 
   getTodaysEvents: (city = 'San Francisco') => {
-    const todayStart = moment().startOf('day').format();
-    const todayEnd = moment().endOf('day').format();
+    const todayStart = moment().startOf('day').utcOffset(0, true).format() //moment().startOf('day').format();
+    const todayEnd = moment().add(60, 'days').utcOffset(0, true).format() //moment().endOf('day').format();
     return new Promise((resolve, reject) => {
       Promise.resolve(knex.raw(`SELECT * from events e WHERE e.start_datetime BETWEEN '${todayStart}' AND '${todayEnd}' AND e.city='${city}'`)).then( (results) => {
         resolve(results);
@@ -114,6 +150,10 @@ module.exports = {
     //   });
     // })
   },
+
+  // addD3Event: (obj) => {
+
+  // }
 
   // search for events in table
   // categories will always be a list of category
