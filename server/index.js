@@ -109,6 +109,8 @@ app.get('/initialLoad', (req, res) => {
     });
 });
 
+
+//Function to message data taken from their init
 let dataMassager = (event, city)=>{
   const imageUrl = event.logo ? event.logo.url : 'https://cdn.evbstatic.com/s3-build/perm_001/f8c5fa/django/images/discovery/default_logos/4.png';
   const catID = event.subcategory_id === 17001 ? event.subcategory_id : event.category_id;
@@ -133,38 +135,45 @@ let dataMassager = (event, city)=>{
 // ======================================================================
 //                    Query the DB on client filters
 // ======================================================================
+
+app.post('/weekend', (req, res) => {
+  getEvents.weekend(req.body.city.toLowerCase())
+    .then((data) => {
+      res.status(200);
+      res.json(data);
+    });
+});
+
 app.post('/filter', (request, response) => {
   const { date, price } = request.body;
   const categories = request.body.category;
   let city = request.body.city;
   city = city.toLowerCase();
-  console.log('City works?', request.body.city)
   if (city === '') {
+    //Default City SF
     city = 'San Francisco';
     db.searchAllEvents(date, categories, price, city)
       .then((data) => {
         response.json(data);
       });
   } else {
-    // console.log('in the else of /filter');
-    db.searchEventsByCity(city).then((cityEvents)=>{
-      console.log('in the filter else then');
-      console.log('city', city);
+    // Use searchEventsByCity here to query by city instead of searchAllEvents
+    // since the date could create an edge case
+    db.searchEventsByCity(city).then((cityEvents) => {
       if (cityEvents.rows.length === 0) {
-        //Do API call for city
+        // We know it's not in the DB
+        // Do API call for city
         console.log('There are no events for city in the db');
-        getEvents.cityApi(city, 5).then((cityEvents)=>{
-          console.log('in the then of cityApi');
-          let parsedEvents = cityEvents;
-          
+        getEvents.cityApi(city, 5).then((newEvents) => {
+          let parsedEvents = newEvents;
           let massagedData = [];
-          parsedEvents.forEach((event) => {massagedData.push(dataMassager(event, city)); });
+          parsedEvents.forEach((event) => { massagedData.push(dataMassager(event, city)); });
+          // Add each massaged event
           db.addEvents(massagedData).then(() => {
             console.log('Massaged Data added to the db');
-            console.log('DATE of filter:', date);
+            // Get each of the events that we've added and serve it to client
             db.searchAllEvents(date, categories, price, city)
               .then((data) => {
-                response.status(200);
                 response.json(data);
               })
               .catch((err) => {
@@ -172,39 +181,22 @@ app.post('/filter', (request, response) => {
               });
           })
             .catch((err) => {
-              console.log('Error thrown while inserting massaged data into db');
+              console.log('Error thrown while inserting massaged data into db', err);
             });
-          });
-        } else {
-        //We know we already have it in our DB, serve it from db
+        });
+      } else {
+        //We know we already have it in our DB, serve it from DB
         console.log('There are events for the city in the db');
         db.searchAllEvents(date, categories, price, city)
-        .then((data) => {
-          response.json(data);
-        });
+          .then((data) => {
+            response.json(data);
+          });
       }
-      
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log('Error in the filter searchEventsByCity')
-    })
-  }
-
-app.post('/weekend', (req, res) => {
-  console.log('req.body', req.body);
-  console.log('req.body.city', req.body.city);
-  
-  getEvents.weekend(req.body.city.toLowerCase())
-    .then((data) => {
-      console.log('WEEKEND DATA FROM POST:', data);
-      console.log('typeof data', typeof data);
-      res.status(200);
-      res.json(data);
     });
+  }
 });
-
-});
-
-
 
 // ======================================================================
 //                    Send today's data back to the client

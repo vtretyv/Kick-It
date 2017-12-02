@@ -15,7 +15,6 @@ class App extends React.Component {
 	componentDidMount() {
 		fetch('/initialLoad')
 			.then((response) => {
-				console.log('response received from server:', JSON.stringify(response));
 				return response.json();
 			})
 			.then((data) => {
@@ -26,7 +25,6 @@ class App extends React.Component {
 		.then(() => {
 			fetch('/weekend')
 			.then((response) => {
-				console.log('data from API for weekend', response);
 				return response.json();
 			})
 			.then((data) => {
@@ -48,20 +46,12 @@ class App extends React.Component {
 			body: JSON.stringify(filters),
 		})
 		.then((response)=> {
-			console.log('RESPONSE in runFilters:', response);
 			return response.json();
 		})
 		.then((events)=> {
-			console.log('EVENTS in runFilters:', events);
-			if (events.rows){
-				this.setState({
-					featured: events.rows
-				})
-			} else {
-				this.setState({
-					featured: events.today.rows
-				})
-			}	
+			this.setState({
+				featured: events.rows,
+			})
 		}).then(()=>{
 			fetch('/weekend', {
 				headers: {
@@ -72,7 +62,6 @@ class App extends React.Component {
 				body: JSON.stringify({'city':filters.city}),
 			})
 			.then((res) => {
-				console.log('RESPONSE in weekend POST:', res);
 				return res.json();
 			})
 			.then((data) => {
