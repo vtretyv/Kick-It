@@ -111,24 +111,47 @@ class App extends React.Component {
     return d3Data;
   }
 
-  runFilters(filters) {
-    fetch('/filter', {
-      headers: {
-        //'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify(filters),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((events) => {
-        this.setState({
-          featured: events.rows
-        });
-      });
-  }
+
+	runFilters(filters) {
+		fetch('/filter', {
+			headers: {
+				//'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			},
+			method: 'POST',
+			body: JSON.stringify(filters),
+		})
+		.then((response)=> {
+			return response.json();
+		})
+		.then((events)=> {
+			this.setState({
+				featured: events.rows,
+			})
+		}).then(()=>{
+			fetch('/weekend', {
+				headers: {
+					//'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+				body: JSON.stringify({'city':filters.city}),
+			})
+			.then((res) => {
+				return res.json();
+			})
+			.then((data) => {
+				let events = JSON.parse(data).events;
+				this.setState({
+					weekend: events,
+				});
+			})
+			.catch((err)=>{
+				console.log('ERROR getting weekend from filter post', err);
+			})
+		})
+
+	}
 
   render() {
     return (
