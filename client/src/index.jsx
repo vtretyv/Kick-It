@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 import SearchBarContainer from './components/SearchBarContainer.jsx';
 import EventListContainer from './components/EventListContainer.jsx';
+import EventMap from './components/EventMap.jsx';
 import Piechart from './components/Piechart.jsx';
 import States from './components/States.jsx';
-
 
  // 103   | music         | Music
  // 110   | food          | Food & Drink
@@ -18,52 +19,78 @@ import States from './components/States.jsx';
  // 108   | active        | Active
  // 109   | active        | Active
 
+
+const { RAWAPI } = require('../../config.js');
+
+
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      featured: [],
-      weekend: [],
-      isLoggedIn: false,
+	constructor() {
+		super();
+		this.state = {
+			featured: [],
+			weekend: [],
+			isLoggedIn: false,
       userFirstName: '',
-      d3Data: []
-    };
-  }
-  
-  componentDidMount() {
-
-    fetch('/initialLoad')
-      .then((response) => {
-        console.log('response received from server:', JSON.stringify(response));
-        return response.json();
-      })
-      .then((data) => {
-        console.log('data about to be put into todays state:', data.today);
-
-        // creates massaged data for d3
+      d3Data: [],
+			venueLocations: [],
+		}
+	}
+	componentDidMount() {
+		fetch('/initialLoad')
+			.then((response) => {
+				console.log('response received from server:', JSON.stringify(response));
+				return response.json();
+			})
+			.then((data) => {
+				console.log('data about to be put into todays state:', data.today);
+				 // creates massaged data for d3
         const d3Data = this.createD3Data(data.today);
-
-        // Passes d3data into state
-        this.setState({
+				this.setState({
           featured: data.today,
           d3Data: d3Data
-        })
-      })
-      .then(() => {
-        fetch('/weekend')
-          .then((response) => {
-            console.log('data from API for weekend', response);
-            return response.json();
-          })
-          .then((data) => {
-            //console.log('data about to be put into weekend state: ' , data);
-            let events = JSON.parse(data).events;
-            this.setState({
-              weekend: events,
-            });
-          });
-      });
-  }
+				})
+				return data;
+			})
+			.then((data) =>  {
+				let venueIDContainer = [];
+				let locationContainer = [];
+				let promiseContainer = [];
+				new Promise((resolve, reject) => {
+					data.today.forEach((event) => {
+					venueIDContainer.push(event.venue_id);
+				});	
+				venueIDContainer.forEach((venueID) => {
+					//venueID = Number(venueID);
+					axios.get(`https://www.eventbriteapi.com/v3/venues/${venueID}/?token=${RAWAPI}`)
+					.then((location) => {
+						locationContainer.push({ lat: Number(location.data.address.latitude), lng: Number(location.data.address.longitude)});
+					})
+					
+				})
+				resolve(locationContainer)
+				}).then(() => {
+					this.setState({
+						venueLocations: locationContainer
+					});
+
+				})
+				
+			})
+		.then(() => {
+			fetch('/weekend')
+			.then((response) => {
+				console.log('data from API for weekend', response);
+				return response.json();
+			})
+			.then((data) => {
+				//console.log('data about to be put into weekend state: ' , data);
+				let events = JSON.parse(data).events;
+				this.setState({
+					weekend: events,
+				});
+			});
+		});
+	}
 
   createD3Data(raw) {
     let music = 0;
@@ -111,7 +138,6 @@ class App extends React.Component {
     return d3Data;
   }
 
-
 	runFilters(filters) {
 		fetch('/filter', {
 			headers: {
@@ -151,12 +177,11 @@ class App extends React.Component {
 			})
 		})
 
-	}
 
-  render() {
-    return (
-      <div>
-        <h1>Kick It</h1>
+	render() {
+		return (
+			<div>
+				<h1>Kick It</h1>
         <div>
           {this.state.isLoggedIn ?
             <div>
@@ -171,22 +196,33 @@ class App extends React.Component {
             </div>
            }
         </div>
-        <SearchBarContainer runFilters={this.runFilters.bind(this)}/>
-        <div className="album text-muted">
-          <div className="container">
+				<SearchBarContainer runFilters={this.runFilters.bind(this)}/>
+				<div className="album text-muted">
+					<div className="container">
             <div>
               <States />
               <Piechart data={this.state.d3Data} />
             </div>
-            <EventListContainer 
-              featuredEvents={this.state.featured}
-              weekendEvents={this.state.weekend.slice(0,10)} 
-            />
-          </div>
-        </div>        
-      </div>
-    )
-  }
-}
+						<EventListContainer 
+							featuredEvents={this.state.featured}
+							weekendEvents={this.state.weekend.slice(0,10)} 
+						/>
+					</div>
+					<div>
+					<br />
+					<EventMap
+						venues={this.state.venueLocations}
+            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
+            loadingElement={<div style={{ height: `100%` }} />}
+            containerElement={<div style={{ height: `500px` }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+          />
+					</div>
+				</div>
+				
+			</div>
+		)
+	}
+
 
 ReactDOM.render(<App />, document.getElementById('app'));
