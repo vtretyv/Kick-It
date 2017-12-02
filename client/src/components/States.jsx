@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { min, max } from 'd3-array';
 import { interpolate } from 'd3-interpolate';
 import stateData from '../../../lib/stateData.js';
+// import realEventData from 'masterEventData.js';
+import realEventData from '../../../sampleData/masterEventData.js';
 import _ from 'underscore';
 import $ from 'jquery';
 
@@ -31,6 +33,79 @@ states.forEach((d) => {
   };
 });
 
+const mapCatName = (categoryNumber) => {
+  if (categoryNumber === 102) {
+    return 'Science & Tech';
+  } else if (categoryNumber === 103) {
+    return 'Music';
+  } else if (categoryNumber === 104) {
+    return 'Movies';
+  } else if (categoryNumber === 105) {
+    return 'Art';
+  } else if (categoryNumber === 106) {
+    return 'Fashion';
+  } else if (categoryNumber === 107 || categoryNumber === 108) {
+    return 'Sports & Fitness';
+  } else if (categoryNumber === 109) {
+    return 'Travel & Outdoors';
+  } else if (categoryNumber === 110) {
+    return 'Food & Drink';
+  } else if (categoryNumber === 111) {
+    return 'Charity';
+  } else if (categoryNumber === 113) {
+    return 'Community Events';
+  } else if (categoryNumber === 116) {
+    return 'Holiday';
+  } else if (categoryNumber === 118) {
+    return 'Auto, Boat, Air';
+  }
+};
+
+const eventData = {};
+
+realEventData.forEach((event) => {
+  const stateName = event[3];
+  const catName = mapCatName(event[4]);
+  // console.log(`cat name = ${catName}, state = ${stateName}, ${event[3]}, ${event[4]}`);
+  if (!eventData[stateName]) {
+    // state exists in obj
+    eventData[stateName] = {
+     'Science & Tech': 0,
+     'Music': 0,
+     'Movies': 0,
+     'Art': 0,
+     'Fashion': 0,
+     'Sports & Fitness': 0,
+     'Travel & Outdoors': 0,
+     'Food & Drink': 0,
+     'Charity': 0,
+     'Community Events': 0,
+     'Holiday': 0,
+     'Auto, Boat, Air': 0,
+    };
+  }
+  eventData[stateName][catName]++;
+  // console.log(`cat value: ${eventData[stateName][catName]}`)
+});
+
+console.log(`fuckin events: ${JSON.stringify(eventData, null, 2)}`);
+
+
+
+    // 102 - Science & Tech
+    // 103 - Music
+    // 104 - Movies
+    // 105 - Art
+    // 106 - Fashion
+    // 107 and 108 - Sports and Fitness
+    // 109 - Travel and Outdoor
+    // 110 - Food and Drink
+    // 111 - Charity
+    // 113 - Community Events
+    // 116 - Holiday
+    // 118 - Auto, Boat, Air
+
+
 
 function dataReturn(state) {
   return state.d;
@@ -41,7 +116,7 @@ const ToolTipUS = ({ data }) => {
   return (
     <div className="toolUS">
       <div>{`${data.name}`}</div>
-      {_.map(sampleData[data.id], (value, label) => {
+      {_.map(eventData[data.id], (value, label) => {
         return (<div>{label}: {value}</div>);
       })}
     </div>);
@@ -54,7 +129,7 @@ const ToolTipUS = ({ data }) => {
 // Triggered on click
 // ===================
 function formatDataForPie(id) {
-  return _.map(sampleData[id], (value, label) => {
+  return _.map(eventData[id], (value, label) => {
     return { label: label, value: value };
   });
 }
@@ -97,6 +172,7 @@ class States extends Component {
   }
 
   render() {
+    console.log(JSON.stringify(realEventData.slice(0, 20)));
     return (
       <div className="map">
         <div>{this.state.hover === true && <ToolTipUS data={this.state.selection} />}</div>

@@ -68,14 +68,14 @@ const copyFrom = require('pg-copy-streams').from
         knex.schema.createTable('d3data', (table) => {
           table.string('id').primary();
           table.string('name');
-          table.string('music');
-          table.string('food');
-          table.string('community');
-          table.string('dating');
-          table.string('entertainment');
-          table.string('science');
-          table.string('autoboatair');
-          table.string('active');
+          table.string('category');
+          // table.string('food');
+          // table.string('community');
+          // table.string('dating');
+          // table.string('entertainment');
+          // table.string('science');
+          // table.string('autoboatair');
+          // table.string('active');
         }).then( () => {
         // knex.raw(`DROP TABLE IF EXISTS categories;`).then( () => {
             // Promise.resolve(knex.raw(`COPY d3data FROM 'testdata.csv' WITH (FORMAT csv);`))
@@ -227,6 +227,19 @@ module.exports = {
     });
   },
 
+  insertStateData: (eventList) => {
+    return new Promise((resolve, reject) => {
+      eventsList.forEach((event) => {
+        Promise.resolve(knex.raw(`INSERT INTO events (id, name, description, venue_id, price, url, city, image_url, start_datetime, end_datetime, category_id) SELECT '${event.id}', ${event.name}, ${event.description}, '${event.venue_id}', '${event.price}', '${event.url}', '${event.city}', '${event.image_url}', '${event.start_datetime}', '${event.end_datetime}', '${event.category_id}' WHERE NOT EXISTS (SELECT 1 from events WHERE id='${event.id}')`)).then( (results) => {
+          resolve(results);
+        }).catch((err) => {
+          console.log('Error occurred adding events to DB: ');
+          reject(err);
+        });
+      });
+    });
+  }
+
 };
 
 
@@ -247,3 +260,4 @@ const addCategories = (categoryList) => {
     });
   });
 };
+

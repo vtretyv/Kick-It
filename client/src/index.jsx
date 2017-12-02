@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import SearchBarContainer from './components/SearchBarContainer.jsx';
 import EventListContainer from './components/EventListContainer.jsx';
+// import { realEventData } from '../../../sampleData/masterEventData.js';
 import EventMap from './components/EventMap.jsx';
 import Piechart from './components/Piechart.jsx';
 import States from './components/States.jsx';
@@ -10,17 +11,6 @@ import Counties from './components/Counties.jsx';
 import Tree from './components/Tree.jsx';
 const { RAWAPI } = require('../../config.js');
 
-// 103   | music         | Music
-// 110   | food          | Food & Drink
-// 113   | community     | Community Events
-// 116   | community     | Community Events
-// 17001 | dating        | Dating
-// 104   | entertainment | Entertainment
-// 105   | entertainment | Entertainment
-// 102   | science       | Science/Tech
-// 118   | autoBoatAir   | Auto, Boat, Air
-// 108   | active        | Active
-// 109   | active        | Active
 
 
 class App extends React.Component {
@@ -107,6 +97,19 @@ class App extends React.Component {
     let autoBoatAir = 0;
     let active = 0;
 
+
+		// 102 - Science & Tech
+		// 103 - Music
+		// 104 - Movies
+		// 105 - Art
+		// 106 - Fashion
+		// 107 and 108 - Sports and Fitness
+		// 109 - Travel and Outdoor
+		// 110 - Food and Drink
+		// 111 - Charity
+		// 113 - Community Events
+		// 116 - Holiday
+		// 118 - Auto, Boat, Air
 
     raw.forEach(event => {
       if (event.category_id === '103') {
@@ -236,7 +239,6 @@ class App extends React.Component {
            }
         </div>
         <SearchBarContainer runFilters={this.runFilters.bind(this)}/>
-        <Tree />
         <div className="album text-muted">
             <div className="charts">
               

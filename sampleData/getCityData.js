@@ -71,9 +71,9 @@ const getCityData = () => {
   };
 
     // console.log(`saving eventbrite data for results in ${city}`);
-  // for (let i = 1; i < 2; i += 1) {
-  //   getPageOfCity(i, cityList[38]);
-  // }
+  for (let i = 1; i < 2; i += 1) {
+    // getPageOfCity(i, cityList[5]);
+  }
 
   cityList.forEach((city, index) => {
     // console.log(`saving eventbrite data for results in ${city}`);
