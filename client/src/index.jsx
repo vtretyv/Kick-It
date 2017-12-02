@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import SearchBarContainer from './components/SearchBarContainer.jsx';
 import EventListContainer from './components/EventListContainer.jsx';
-// import { realEventData } from '../../../sampleData/masterEventData.js';
 import EventMap from './components/EventMap.jsx';
 import Piechart from './components/Piechart.jsx';
 import States from './components/States.jsx';
-import Counties from './components/Counties.jsx';
+// import Counties from './components/Counties.jsx';
 import Tree from './components/Tree.jsx';
 const { RAWAPI } = require('../../config.js');
 
@@ -241,13 +240,11 @@ class App extends React.Component {
         <SearchBarContainer runFilters={this.runFilters.bind(this)}/>
         <div className="album text-muted">
             <div className="charts">
-              
               <Piechart data={this.state.PieData} />
               <States 
                 data={this.state.StatesData}
                 selectPieData={this.selectPieData}
               />
-              <Counties data={this.state.CountiesData} />
             </div>
 						<EventListContainer 
 							featuredEvents={this.state.featured}

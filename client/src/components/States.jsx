@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { min, max } from 'd3-array';
 import { interpolate } from 'd3-interpolate';
 import stateData from '../../../lib/stateData.js';
-// import realEventData from 'masterEventData.js';
 import realEventData from '../../../sampleData/masterEventData.js';
 import _ from 'underscore';
 import $ from 'jquery';
@@ -134,6 +133,19 @@ function formatDataForPie(id) {
   });
 }
 
+function colorSelector(label) {
+
+  // this.props.data will be the obj with the data to calculate color intensities
+  // this.props.data[label] should give an object {category1: value, category2: value, ...}
+
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
 
 class States extends Component {
   constructor(props) {
@@ -172,7 +184,6 @@ class States extends Component {
   }
 
   render() {
-    console.log(JSON.stringify(realEventData.slice(0, 20)));
     return (
       <div className="map">
         <div>{this.state.hover === true && <ToolTipUS data={this.state.selection} />}</div>
@@ -180,8 +191,8 @@ class States extends Component {
             {stateData.map(state => {
               return (
                 <path
-                  stroke="red"
-                  fill="#d89e9e"
+                  stroke={colorSelector(state.id)}
+                  fill={colorSelector(state.id)}
                   className="state"
                   key={state.id}
                   d={dataReturn(state)}
