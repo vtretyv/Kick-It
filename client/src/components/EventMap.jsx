@@ -10,8 +10,9 @@ const EventMap = withScriptjs(withGoogleMap(props =>
     defaultZoom={13}
     defaultCenter={{ lat: 37.7749, lng: -122.4194 }}
   >
-    {savedLocations.map((address, index) => {
+    {props.venues.map((address, index) => {
       return <Marker
+               
                key={index.toString()}
                position={address}
              />
@@ -47,5 +48,5 @@ const getLatLong = (arr) => {
 
 const savedLocations = getLatLong(places);
 
-//get locations from API
-//https://www.eventbriteapi.com/v3/venues/15304516/?token={API_KEY}
+// get locations from API
+// https://www.eventbriteapi.com/v3/venues/15304516/?token={API_KEY}

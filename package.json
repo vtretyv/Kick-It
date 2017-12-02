@@ -27,6 +27,7 @@
   "homepage": "https://github.com/Kick-It/Kick-It#readme",
   "dependencies": {
     "@antv/data-set": "^0.6.2",
+    "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2015": "^6.24.1",
