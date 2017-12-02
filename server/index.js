@@ -54,7 +54,7 @@ app.use(passport.session());
 
 const { getCityData } = require('../sampleData/getCityData.js');
 
-// getCityData();
+getCityData();
 
 // ======================================================================
 //                    User login to Google

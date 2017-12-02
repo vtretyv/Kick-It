@@ -13,21 +13,52 @@ const moment = require('moment');
 const fs = require('fs')
 const copyFrom = require('pg-copy-streams').from
 
+// knex.raw('DROP DATABASE IF EXISTS d3data;').then( () => {
+// knex.raw('CREATE DATABASE d3data;').then( () => {
+//     knex.destroy();
+//     config[dev]['connection']['database'] = 'd3data';
+//     knex = require('knex')(config[dev]);
+//     module.exports = knex;
+//   }).then(() => {
+//     knex.raw(`DROP TABLE IF EXISTS test;`).then( () => {
+//     console.log('creating test table...');
+//     knex.schema.createTable('test', (table) => {
+//       table.string('id').primary();
+//       table.string('name');
+//       table.string('music');
+//       table.string('food');
+//       table.string('community');
+//       table.string('dating');
+//       table.string('entertainment');
+//       table.string('science');
+//       table.string('autoboatair');
+//       table.string('active');
+//     })
+//     }).catch((err) => { console.log(err); })
+//   });
+// });
 
-knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
-  knex.raw('CREATE DATABASE kickit;').then( () => {
-    knex.destroy();
+
+// knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
+
+  const initDB = () => {
+
+  // knex.raw('CREATE DATABASE kickit;').then
+  // ( () => {
+  //   knex.destroy();
+    return new Promise ((resolve, reject) => {
     config[dev]['connection']['database'] = 'kickit';
     knex = require('knex')(config[dev]);
     module.exports = knex;
-  }).then(() => {
-    // knex.raw(`DROP TABLE IF EXISTS venues;`).then( () => {
+    })
+    .then(() => {
+    knex.raw(`DROP TABLE IF EXISTS venues;`).then( () => {
     knex.schema.createTable('venues', (table) => {
       table.string('id').primary();
       table.text('address', 'longtext');
       table.string('name');
     }).then(() => {
-    // knex.raw(`DROP TABLE IF EXISTS categories;`).then( () => {
+    knex.raw(`DROP TABLE IF EXISTS categories;`).then( () => {
       knex.schema.createTable('categories', (table) => {
         table.string('id').primary();
         table.string('shortname');
@@ -36,14 +67,15 @@ knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
         console.log('creating d3data table');
         knex.schema.createTable('d3data', (table) => {
           table.string('id').primary();
-          table.string('location');
           table.string('name');
-          table.string('url');
-          table.string('timezone');
-          table.string('starttime');
-          table.string('category');
-          table.string('subcategory');
-          table.string('free?');
+          table.string('music');
+          table.string('food');
+          table.string('community');
+          table.string('dating');
+          table.string('entertainment');
+          table.string('science');
+          table.string('autoboatair');
+          table.string('active');
         }).then( () => {
         // knex.raw(`DROP TABLE IF EXISTS categories;`).then( () => {
             // Promise.resolve(knex.raw(`COPY d3data FROM 'testdata.csv' WITH (FORMAT csv);`))
@@ -91,8 +123,10 @@ knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
       });
     });
   });
-});
-
+      });
+  });
+// });
+};
 
 
 //==========================================================================================

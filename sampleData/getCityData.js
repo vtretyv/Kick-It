@@ -45,7 +45,7 @@ const getCityData = () => {
       // console.log(JSON.stringify(parsedEvents));
       if (parsedEvents) {
         if (parsedEvents.length < 50) {
-          console.log(`No more events for ${loc} starting at ${pg}, at ${idx}`)
+          // console.log(`No more events for ${loc} starting at ${pg}, at ${idx}`)
         }
         parsedEvents.forEach((event) => {
           const newEvent = [
@@ -60,7 +60,7 @@ const getCityData = () => {
             event.is_free,
             // event.description.text
           ];
-          // largeDataWriter.write(newEvent);
+          largeDataWriter.write(newEvent);
           // insertEventintoD3Table;
           
         });
@@ -80,7 +80,7 @@ const getCityData = () => {
     // for (let i = 1; i < 3; i += 1) {
     //   getPageOfCity(i, city, index);
     // }
-    getPageOfCity(1, city);
+    // getPageOfCity(1, city);
   });
 };
 
