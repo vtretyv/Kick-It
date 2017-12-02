@@ -7,8 +7,8 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-map
 
 const EventMap = withScriptjs(withGoogleMap(props =>
   (<GoogleMap
-    defaultZoom={3}
-    defaultCenter={{ lat: 36.778259, lng: -119.417931 }}
+    defaultZoom={12}
+    center={props.defaultLocation}
   >
     {props.venues.map((address, index) => {
       return <Marker
