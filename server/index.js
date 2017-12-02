@@ -11,7 +11,7 @@ const Promise = require('bluebird');
 const PORT = process.env.PORT || 3000;
 const moment = require('moment');
 const {
-  // APIKEY,
+  APIKEY,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
 } = require('../config.js');
@@ -33,7 +33,7 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser((user, done) => {
-  console.log('User: ', user.displayName); // If there is a persistent session, the console logs out the displayName
+  //console.log('User: ', user.displayName); // If there is a persistent session, the console logs out the displayName
   done(null, user.id);
 });
 
@@ -74,8 +74,8 @@ app.get('/auth/google',
 app.get(
   '/auth/google/callback',
   (req, res, next) => {
-    console.log(req.user);
-    console.log('google callback endpoint is working!');
+    //console.log(req.user);
+    //console.log('google callback endpoint is working!');
     next();
   },
   passport.authenticate('google', { 
@@ -218,6 +218,7 @@ app.post('/weekend', (req, res) => {
 app.post('/filter', (request, response) => {
   const { date, price } = request.body;
   const categories = request.body.category;
+<<<<<<< 18cf63d3187c70f14edd43cdfbf3611f6052f7a6
   let city = request.body.city;
   city = city.toLowerCase();
   if (city === '') {
@@ -265,6 +266,14 @@ app.post('/filter', (request, response) => {
       }
     }).catch((err) => {
       console.log('Error in the filter searchEventsByCity')
+=======
+  // const date = request.body.date;
+  // const price = request.body.price;
+  //console.log('City works?', request.body.city)
+  db.searchAllEvents(date, categories, price)
+    .then((data) => {
+      response.json(data);
+>>>>>>> rking
     });
   }
 });

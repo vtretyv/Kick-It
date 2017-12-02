@@ -39,7 +39,7 @@ const getCityData = () => {
       // console.log('error', error);
       const parsedEvents = JSON.parse(body).events;
       // console.log(`retrieved ${parsedEvents.length} events for  page #${pg} of ${loc}`);
-      console.log(JSON.stringify(parsedEvents));
+      //console.log(JSON.stringify(parsedEvents));
       if (parsedEvents) {
         parsedEvents.forEach((event) => {
           const newEvent = [
