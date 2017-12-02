@@ -1,9 +1,9 @@
 id,location,name,timezone,starttime,category
+39787681025,austin,Ozomatli @ Mohawk,America/Chicago,2017-12-29T01:00:00Z,103
 40158287519,austin,UTCS Staff and Faculty Holiday Party,America/Chicago,2017-12-12T23:00:00Z,116
 39086782619,austin,Trinity Christmas Party,America/Chicago,2017-12-15T01:00:00Z,116
 35188379390,austin,2017 Power Athlete Symposium - Benefiting Wade's Army,America/Chicago,2017-12-08T19:00:00Z,108
 36515855908,austin,Concert & Reception for Alzheimer's Association,America/Chicago,2017-12-03T01:30:00Z,103
-40856529981,austin,Hello World Demo Day,America/Chicago,2017-12-09T14:30:00Z,102
 39048292494,austin,Hack Austin presented by The City of Austin + Galvanize,America/Chicago,2017-12-09T00:00:00Z,102
 39809946622,austin,The 3 Rules behind the Most Successful Products: Talk by SC Moatti,America/Chicago,2017-12-12T01:00:00Z,102
 39495040730,austin,Eddie Bravo Seminar,America/Chicago,2017-12-02T18:00:00Z,108
@@ -20,14 +20,14 @@ id,location,name,timezone,starttime,category
 39788064171,austin,Black Professional Alliance Holiday Event!,America/Chicago,2017-12-09T01:30:00Z,116
 40163127997,austin,"Black Pflugerville Presents ""1804 The Hidden History of Haiti"".",America/Chicago,2017-12-13T02:00:00Z,104
 36732596184,austin,Amazon Alexa: Skill Development Workshops - Austin,America/Chicago,2017-12-14T00:00:00Z,102
+40188377519,austin,StartOut Austin presents LGBTQ Entrepreneurs Holiday Mixer,America/Chicago,2017-12-15T00:30:00Z,113
 37708375767,austin,Gabriel & Dresden (Open to Close) at Highland Lounge,America/Chicago,2017-12-22T04:00:00Z,103
 39017519451,austin,Jingle Bell 5K,America/Chicago,2017-12-16T15:00:00Z,108
 39631321349,austin,NYE at Empire with Grupo Fantasma & CAPYAC @ Empire,America/Chicago,2018-01-01T01:00:00Z,103
-40188377519,austin,StartOut Austin presents LGBTQ Entrepreneurs Holiday Mixer,America/Chicago,2017-12-15T00:30:00Z,113
 39522679398,austin,The Goblin King's New Year's Eve Ball 2017,America/Chicago,2018-01-01T03:00:00Z,116
 39591583492,austin,Chez Zee Presents: A Christmas Carol Dinner with Austin Carolers and Brad Henderson's Magic,America/Chicago,2017-12-24T01:00:00Z,110
-40111435383,austin,"BOOSIE BADAZZ ""THE BOOPAC TOUR""",America/Chicago,2017-12-17T01:00:00Z,103
 39089155717,austin,PARADE: A New Work by Kathy Dunn Hamrick Dance Company,America/Chicago,2017-12-03T01:30:00Z,105
+40111435383,austin,"BOOSIE BADAZZ ""THE BOOPAC TOUR""",America/Chicago,2017-12-17T01:00:00Z,103
 39460100222,austin,The Nutcracker: Suite Dreams 2017,America/Chicago,2017-12-09T01:30:00Z,105
 36174582149,austin,Billy Kenny (Open to Close) at Kingdom,America/Chicago,2017-12-17T04:00:00Z,103
 37387072741,austin,Bleep Bloop with Sayer @ Empire,America/Chicago,2017-12-08T03:00:00Z,103
@@ -44,9 +44,9 @@ id,location,name,timezone,starttime,category
 39048648559,austin,Prayers @ Mohawk,America/Chicago,2017-12-11T00:30:00Z,103
 40159119006,austin,Big Freedia @ Mohawk,America/Chicago,2018-01-08T00:30:00Z,103
 40206969127,austin,Christmas Lights Hike at Mount Bonnell,America/Chicago,2017-12-14T00:00:00Z,108
-37923123082,austin,Caring Santa,America/Chicago,2017-12-03T14:30:00Z,116
 39251978725,austin,Steve Poltz,America/Chicago,2017-12-06T02:00:00Z,103
 40706061927,austin,Club Bantu Afrobeats Holiday Party,America/Chicago,2017-12-18T01:30:00Z,103
+37923123082,austin,Caring Santa,America/Chicago,2017-12-03T14:30:00Z,116
 40161455996,austin,NAKID MAGAZINE + THANK YOU FOR SWEATING presents H O T - H O T! - 12.2.17,America/Chicago,2017-12-03T05:30:00Z,103
 40880374300,austin,Kubernetes sig-aws happy hour at Bangers Austin,America/Chicago,2017-12-07T02:30:00Z,102
 37824050754,austin,KubeCon + CloudNativeCon North America,America/Chicago,2017-12-06T14:00:00Z,102
@@ -97,5 +97,5 @@ id,location,name,timezone,starttime,category
 38550604897,austin,"The Wrecks, Brick + Mortar, Lovelytheband @ Barracuda",America/Chicago,2017-12-08T02:00:00Z,103
 39298787732,austin,"REBECCA HAVEMEYER & STANLEY ROY present:  ""HAVE U SEEN MY CHRISTMUSS?!"" @ The North Door",America/Chicago,2017-12-22T01:30:00Z,103
 37221414252,austin,Opal Divine's 15th Annual Whisky Festival,America/Chicago,2017-12-08T01:00:00Z,110
+40856529981,austin,Hello World Demo Day,America/Chicago,2017-12-09T14:30:00Z,102
 39308067488,austin,The Chinese Exclusion Act (AAAFF 2017),America/Chicago,2017-12-08T00:45:00Z,104
-39787681025,austin,Ozomatli @ Mohawk,America/Chicago,2017-12-29T01:00:00Z,103
