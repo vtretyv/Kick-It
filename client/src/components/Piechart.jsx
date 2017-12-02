@@ -2,20 +2,32 @@ import React, { Component } from 'react';
 import { scaleOrdinal } from 'd3-scale';
 import { arc, pie } from 'd3-shape';
 
-const color = scaleOrdinal(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
+// ===================
+// DATA FORMAT FOR PIECHART:
+// ===================
 
+// this.props.data = [{ label: 'music', category: [103], value: music },
+// { label: 'food', category: [110], value: food },
+// { label: 'community', category: [113, 116], value: community },
+// { label: 'dating', category: [17001], value: dating },
+// { label: 'entertainment', category: [104, 105], value: entertainment },
+// { label: 'science', category: [102], value: science },
+// { label: 'autoBoatAir', category: [118], value: autoBoatAir },
+// { label: 'active', category: [108, 109], value: active }]
+
+
+// ===================
+// D3 Math
+// ===================
+
+const color = scaleOrdinal(['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']);
 const width = 600;
 const height = 600;
 const radius = Math.min(width - 200, height - 200) / 2;
 
-
 const dataArc = arc()
   .outerRadius(radius - 10)
   .innerRadius(100);
-
-const labelArc = arc()
-  .outerRadius(radius - 40)
-  .innerRadius(radius - 40);
 
 const pieChart = pie()
   .sort(null)
@@ -30,6 +42,11 @@ function labelPath(center, label) {
   return `M ${cx} ${cy} L ${lx} ${ly}`;
 }
 
+
+// ===================
+// Toast Component
+// ===================
+
 const ToolTipPie = ({ data }) => {
   return (
     <div className="toolPie">
@@ -38,45 +55,45 @@ const ToolTipPie = ({ data }) => {
   );
 };
 
-// const ToolTipPie = ({ data }) => {
-//   const componentClasses = ['toolPie'];
-//   if (data) { componentClasses.push('show'); }
-//   return (
-//     <div className={componentClasses.join(' ')} >{`${data.label} ${data.value}`}</div>
-//   );
-// };
 
-
+// ===================
+// Piechart Component
+// ===================
 class Piechart extends Component {
   constructor(props) {
     super(props);
     this.state = {
       hover: false,
-      selection: {}
+      selection: { label: "Searched Data", value: " " }
     };
   }
 
-
+  // ===================
+  // Mouse Over Event Listener
+  // Changes hover to true, updates selection with the hovered tile data
+  // ===================
   mouseOverEvent(d, e) {
     this.setState({
       hover: true,
       selection: { d: d, label: d.data.label, value: d.value }
     });
-  };
+  }
 
+  // ===================
+  // Mouse Exit Event Listener
+  // Changes hover to false
+  // ===================
   mouseLeaveEvent() {
     this.setState({
       hover: false
     });
-  };
-  
+  }
 
-  // <g transform .... puts the pie chart in the middle of the div object
 
   render() {
     return (
       <div className="pie">
-        <div>{this.state.hover === true && <ToolTipPie data={this.state.selection} />}</div>
+        <div>{this.state.hover && <ToolTipPie data={this.state.selection} />}</div>
         <svg className="Piechart" width={width} heigth={height} >
           <g transform={`translate(${(width) / 2}, ${(height) / 2})`}>
             {pieChart(this.props.data).map((d, i) => {
@@ -85,27 +102,29 @@ class Piechart extends Component {
               const center = dataArc.centroid(d);
               const cx = center[0];
               const cy = center[1];
-              const h = Math.sqrt((cx * cx) + (cy * cy));
               const labelRadius = 230;
+              const h = Math.sqrt((cx * cx) + (cy * cy));
               const labelPosition1 = [((cx / h) * labelRadius), ((cy / h) * labelRadius)];
-              const labelPosition2 = [((cx / h) * (labelRadius+30)), ((cy / h) * (labelRadius+30))];
+              const labelPosition2 = [((cx / h) * (labelRadius + 30)), ((cy / h) * (labelRadius + 30))];
 
-              return (<g key={i} className="arc">
-                <path
-                  d={dataArc(d)}
-                  fill={color(d.data.label)}
-                  onMouseOver={(e) => { this.mouseOverEvent(d, e); }}
-                  onMouseLeave={() => { this.mouseLeaveEvent(); }}
-                />
-                <path fill="red" stroke="red" d={labelPath(center, labelPosition1)} />
-                <text
-                  className="label"
-                  dy=".15em"
-                  transform={`translate(${(i%2) ? labelPosition1 : labelPosition2})`}
-                >
-                  {d.value !== 0 && d.data.label}
-                </text>
-              </g>);
+              return (
+                <g key={i} className="arc">
+                  <path
+                    d={dataArc(d)}
+                    fill={color(d.data.label)}
+                    onMouseOver={(e) => { this.mouseOverEvent(d, e); }}
+                    onMouseLeave={() => { this.mouseLeaveEvent(); }}
+                  />
+                  <path className="labelLines" d={labelPath(center, labelPosition1)} />
+                  <text
+                    className="label"
+                    dy=".15em"
+                    transform={`translate(${(i % 2) ? labelPosition1 : labelPosition2})`}
+                  >
+                    {d.value !== 0 && d.data.label}
+                  </text>
+                </g>
+              );
             })}
           </g>
         </svg>

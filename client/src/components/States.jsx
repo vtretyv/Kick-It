@@ -5,14 +5,16 @@ import stateData from '../../../lib/stateData.js';
 import _ from 'underscore';
 import $ from 'jquery';
 
-const sampleData = {};
 
+// ===================
+// Sample data: links a state to categories with values
+// ===================
+const sampleData = {};
 const states = ['HI', 'AK', 'FL', 'SC', 'GA', 'AL', 'NC', 'TN', 'RI', 'CT', 'MA',
   'ME', 'NH', 'VT', 'NY', 'NJ', 'PA', 'DE', 'MD', 'WV', 'KY', 'OH',
   'MI', 'WY', 'MT', 'ID', 'WA', 'DC', 'TX', 'CA', 'AZ', 'NV', 'UT',
   'CO', 'NM', 'OR', 'ND', 'SD', 'NE', 'IA', 'MS', 'IN', 'IL', 'MN',
   'WI', 'MO', 'AR', 'OK', 'KS', 'LS', 'VA'];
-
 states.forEach((d) => {
   const low = Math.round(100 * Math.random());
   const mid = Math.round(100 * Math.random());
@@ -25,7 +27,7 @@ states.forEach((d) => {
     Entertainment: Math.round(100 * Math.random()),
     Science: Math.round(100 * Math.random()),
     AutoBoatAir: Math.round(100 * Math.random()),
-    active: Math.round(100 * Math.random())
+    Active: Math.round(100 * Math.random())
   };
 });
 
@@ -46,6 +48,11 @@ const ToolTipUS = ({ data }) => {
 };
 
 
+
+// ===================
+// Changes sample data to a form that the Piechart wants
+// Triggered on click
+// ===================
 function formatDataForPie(id) {
   return _.map(sampleData[id], (value, label) => {
     return { label: label, value: value };
@@ -105,7 +112,7 @@ class States extends Component {
                   onMouseEnter={(e) => { this.mouseEnterEvent(state, e); }}
                   onMouseMove={(e) => { this.mouseMoveEvent(state, e); }}
                   onMouseLeave={() => { this.mouseLeaveEvent(); }}
-                  onClick={ () => { this.props.selectPieData(formatDataForPie(state.id)); }}
+                  onClick={() => { this.props.selectPieData(formatDataForPie(state.id)); }}
                 ></path>
               );
             })}
@@ -116,14 +123,3 @@ class States extends Component {
 
 export default States;
 
-
-// [
-//       { label: 'music', category: [103], value: music },
-//       { label: 'food', category: [110], value: food },
-//       { label: 'community', category: [113, 116], value: community },
-//       { label: 'dating', category: [17001], value: dating },
-//       { label: 'entertainment', category: [104, 105], value: entertainment },
-//       { label: 'science', category: [102], value: science },
-//       { label: 'autoBoatAir', category: [118], value: autoBoatAir },
-//       { label: 'active', category: [108, 109], value: active }
-//     ]

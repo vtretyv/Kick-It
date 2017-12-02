@@ -4,6 +4,17 @@ import { interpolate } from 'd3-interpolate';
 import countyData from '../../../lib/countyData.js';
 
 
+// ===================
+// this.props.data = {
+// "Northwest Arctic, AK": {},
+// "Clarke, AL": {},
+// "Bienville, LA": {},
+// ...
+// }
+// the value object will look like this: {category1: value, category2: value, ...}
+// ===================
+
+
 function dataReturn(state) {
   return state.d;
 }
@@ -41,6 +52,10 @@ class States extends Component {
 
   // use d3 interpolate!
   colorSelector(label) {
+
+    // this.props.data will be the obj with the data to calculate color intensities
+    // this.props.data[label] should give an object {category1: value, category2: value, ...}
+
     const letters = '0123456789ABCDEF';
     let color = '#';
     for (let i = 0; i < 6; i++) {
@@ -73,5 +88,3 @@ class States extends Component {
 }
 
 export default States;
-
-
