@@ -113,7 +113,7 @@ class States extends Component {
                   onMouseMove={(e) => { this.mouseMoveEvent(state, e); }}
                   onMouseLeave={() => { this.mouseLeaveEvent(); }}
                   onClick={() => { this.props.selectPieData(formatDataForPie(state.id)); }}
-                ></path>
+                />
               );
             })}
         </svg>

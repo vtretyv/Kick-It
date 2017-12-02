@@ -7,6 +7,7 @@ import EventMap from './components/EventMap.jsx';
 import Piechart from './components/Piechart.jsx';
 import States from './components/States.jsx';
 import Counties from './components/Counties.jsx';
+import Tree from './components/Tree.jsx';
 const { RAWAPI } = require('../../config.js');
 
 // 103   | music         | Music
@@ -70,7 +71,6 @@ class App extends React.Component {
 					.then((location) => {
 						locationContainer.push({ lat: Number(location.data.address.latitude), lng: Number(location.data.address.longitude)});
 					})
-					
 				})
 				resolve(locationContainer)
 				}).then(() => {
@@ -236,8 +236,10 @@ class App extends React.Component {
            }
         </div>
         <SearchBarContainer runFilters={this.runFilters.bind(this)}/>
+        <Tree />
         <div className="album text-muted">
             <div className="charts">
+              
               <Piechart data={this.state.PieData} />
               <States 
                 data={this.state.StatesData}

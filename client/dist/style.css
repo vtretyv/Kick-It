@@ -85,14 +85,29 @@ img {
   visibility: visible; 
 }
 
-.toolUS p {
-  font-color: red;
-  text-align: top; 
+.toolTree {
+  position: absolute;           
+  width: 140px;
+  height: 10px;
+  top: 400px;
+  left: 220px;
+  text-align: center;
+  padding: 20px;             
+  margin: 10px;
+  font: 12px sans-serif;        
+  background: black;   
+  border: 1px;      
+  border-radius: 2px;           
+  pointer-events: none;
+  transition: 0.5s;
+  opacity: 0.9;
+  transition-duration: 6000ms;
+  visibility: visible; 
 }
 
 .state{
-  fill: lightsteelblue;
-  stroke: navy;
+/*  fill: lightsteelblue;
+  stroke: navy;*/
   stroke-width: 1;
   }
 
@@ -141,3 +156,18 @@ img {
 .charts {
   display: inline-block;
 }
+
+.Tree {
+  width: 1200px;
+  height: 1000px;
+  float: left;
+  margin-left: 10px;
+  border: 1px solid green;
+}
+
+.branch{
+/*  fill: lightsteelblue;
+  stroke: navy;*/
+  st/*roke: navy;
+  stroke-width: 10;*/
+  }
