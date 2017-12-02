@@ -31,6 +31,7 @@ class App extends React.Component {
 			isLoggedIn: false,
       userFirstName: '',
 			venueLocations: [],
+			defaultLocation: { lat: 37.7749, lng: -122.4194 },
       PieData: [],
       StatesData: {},
       CountiesData: {}
@@ -74,11 +75,10 @@ class App extends React.Component {
 				resolve(locationContainer)
 				}).then(() => {
 					this.setState({
-						venueLocations: locationContainer
+						venueLocations: locationContainer,
+						defaultLocation: locationContainer[0]
 					});
-
 				})
-				
 			})
 		.then(() => {
 			fetch('/weekend')
@@ -160,7 +160,32 @@ class App extends React.Component {
 			this.setState({
 				featured: events.rows,
 			})
-		}).then(()=>{
+		return events.rows;
+		})
+		.then((data) =>  {
+			let venueIDContainer = [];
+			let locationContainer = [];
+			let promiseContainer = [];
+			new Promise((resolve, reject) => {
+				data.forEach((event) => {
+				venueIDContainer.push(event.venue_id);
+			});	
+			venueIDContainer.forEach((venueID) => {
+				//venueID = Number(venueID);
+				axios.get(`https://www.eventbriteapi.com/v3/venues/${venueID}/?token=${RAWAPI}`)
+				.then((location) => {
+					locationContainer.push({ lat: Number(location.data.address.latitude), lng: Number(location.data.address.longitude)});
+				})	
+			})
+			resolve(locationContainer)
+			}).then(() => {
+				this.setState({
+					venueLocations: locationContainer,
+					defaultLocation: locationContainer[0]
+				});
+			})
+		})
+		.then(()=>{
 			fetch('/weekend', {
 				headers: {
 					//'Accept': 'application/json',
@@ -229,6 +254,7 @@ class App extends React.Component {
   					<br />
   					<EventMap
   						venues={this.state.venueLocations}
+							defaultLocation={this.state.defaultLocation}
               googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places"
               loadingElement={<div style={{ height: `100%` }} />}
               containerElement={<div style={{ height: `500px` }} />}

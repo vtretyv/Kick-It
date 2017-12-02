@@ -5,10 +5,11 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-map
 // const geocoder = require('google-geocoder');
 
 
+
 const EventMap = withScriptjs(withGoogleMap(props =>
   (<GoogleMap
     defaultZoom={13}
-    defaultCenter={{ lat: 37.7749, lng: -122.4194 }}
+    defaultCenter={ props.defaultLocation }
   >
     {props.venues.map((address, index) => {
       return <Marker
@@ -20,6 +21,7 @@ const EventMap = withScriptjs(withGoogleMap(props =>
   </GoogleMap>)));
 
 export default EventMap;
+
 
 
 // testing geocode
