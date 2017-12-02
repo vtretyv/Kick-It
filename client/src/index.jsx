@@ -48,7 +48,7 @@ class App extends React.Component {
 			.then((data) => {
 				console.log('data about to be put into todays state:', data.today);
 				 // creates massaged data for d3
-        const d3Data = this.createD3Data(data.today);
+        const PieData = this.createD3Data(data.today);
 				this.setState({
           featured: data.today,
           PieData: PieData
