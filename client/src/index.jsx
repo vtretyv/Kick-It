@@ -7,7 +7,7 @@ import EventMap from './components/EventMap.jsx';
 import Piechart from './components/Piechart.jsx';
 import States from './components/States.jsx';
 // import Counties from './components/Counties.jsx';
-import Tree from './components/Tree.jsx';
+// import Tree from './components/Tree.jsx';
 const { RAWAPI } = require('../../config.js');
 
 
