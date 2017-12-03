@@ -10,92 +10,26 @@ const Promise = require('bluebird');
 const categoryList = require('../category_map.json');
 const moment = require('moment');
 
-const fs = require('fs')
-const copyFrom = require('pg-copy-streams').from
 
-// knex.raw('DROP DATABASE IF EXISTS d3data;').then( () => {
-// knex.raw('CREATE DATABASE d3data;').then( () => {
-//     knex.destroy();
-//     config[dev]['connection']['database'] = 'd3data';
-//     knex = require('knex')(config[dev]);
-//     module.exports = knex;
-//   }).then(() => {
-//     knex.raw(`DROP TABLE IF EXISTS test;`).then( () => {
-//     console.log('creating test table...');
-//     knex.schema.createTable('test', (table) => {
-//       table.string('id').primary();
-//       table.string('name');
-//       table.string('music');
-//       table.string('food');
-//       table.string('community');
-//       table.string('dating');
-//       table.string('entertainment');
-//       table.string('science');
-//       table.string('autoboatair');
-//       table.string('active');
-//     })
-//     }).catch((err) => { console.log(err); })
-//   });
-// });
-
-
-// knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
-
-  const initDB = () => {
-
-  // knex.raw('CREATE DATABASE kickit;').then
-  // ( () => {
-  //   knex.destroy();
-    return new Promise ((resolve, reject) => {
+knex.raw('DROP DATABASE IF EXISTS kickit;').then( () => {
+  knex.raw('CREATE DATABASE kickit;').then( () => {
+    knex.destroy();
     config[dev]['connection']['database'] = 'kickit';
     knex = require('knex')(config[dev]);
     module.exports = knex;
-    })
-    .then(() => {
-    knex.raw(`DROP TABLE IF EXISTS venues;`).then( () => {
+  }).then(() => {
+    // knex.raw(`DROP TABLE IF EXISTS venues;`).then( () => {
     knex.schema.createTable('venues', (table) => {
       table.string('id').primary();
       table.text('address', 'longtext');
       table.string('name');
     }).then(() => {
-    knex.raw(`DROP TABLE IF EXISTS categories;`).then( () => {
+    // knex.raw(`DROP TABLE IF EXISTS categories;`).then( () => {
       knex.schema.createTable('categories', (table) => {
         table.string('id').primary();
         table.string('shortname');
         table.string('name');
       }).then(() => {
-        console.log('creating d3data table');
-        knex.schema.createTable('d3data', (table) => {
-          table.string('id').primary();
-          table.string('name');
-          table.string('category');
-          // table.string('food');
-          // table.string('community');
-          // table.string('dating');
-          // table.string('entertainment');
-          // table.string('science');
-          // table.string('autoboatair');
-          // table.string('active');
-        }).then( () => {
-        // knex.raw(`DROP TABLE IF EXISTS categories;`).then( () => {
-            // Promise.resolve(knex.raw(`COPY d3data FROM 'testdata.csv' WITH (FORMAT csv);`))
-            Promise.resolve(() => {
-              console.log('starting to copy data from .csv');
-              // knex.client.pool.acquire(function(err, client){
-              //   const done = (err) => {
-              //     console.log('done copying data from .csv into d3data');
-              //     connection.client.pool.release(client)
-              //     if (err) console.log(err)
-              //     else console.log('success')
-              //   }
-              //   var stream = client.query(copyFrom('COPY d3data FROM STDIN'))
-              //   var fileStream = fs.createReadStream('testdata.csv');
-              //   fileStream.on('error', done)
-              //   fileStream.pipe(stream).on('finish', done).on('error', done)
-              // })
-            })
-         
-          .then( () => {
         console.log('Inserting values to categories table..');
         Promise.resolve(addCategories(categoryList)).then(() => {
           knex.raw(`DROP TABLE IF EXISTS events;`).then(() => {
@@ -117,17 +51,13 @@ const copyFrom = require('pg-copy-streams').from
               table.foreign('category_id').references('categories.id');
             }).catch((err) => { console.log(err); });
           });
-        })
-          })
+        // })
+          // })
         });
       });
     });
   });
-      });
-  });
-// });
-};
-
+});
 
 //==========================================================================================
 //                    Events Table
@@ -164,8 +94,8 @@ module.exports = {
   },
 
   getTodaysEvents: (city = 'San Francisco') => {
-    const todayStart = moment().startOf('day').utcOffset(0, true).format() //moment().startOf('day').format();
-    const todayEnd = moment().add(60, 'days').utcOffset(0, true).format() //moment().endOf('day').format();
+    const todayStart = moment().startOf('day').format();
+    const todayEnd = moment().endOf('day').format();
     return new Promise((resolve, reject) => {
       Promise.resolve(knex.raw(`SELECT * from events e WHERE e.start_datetime BETWEEN '${todayStart}' AND '${todayEnd}' AND e.city='${city}'`)).then( (results) => {
         resolve(results);
@@ -184,10 +114,6 @@ module.exports = {
     //   });
     // })
   },
-
-  // addD3Event: (obj) => {
-
-  // }
 
   // search for events in table
   // categories will always be a list of category
@@ -227,19 +153,6 @@ module.exports = {
     });
   },
 
-  insertStateData: (eventList) => {
-    return new Promise((resolve, reject) => {
-      eventsList.forEach((event) => {
-        Promise.resolve(knex.raw(`INSERT INTO events (id, name, description, venue_id, price, url, city, image_url, start_datetime, end_datetime, category_id) SELECT '${event.id}', ${event.name}, ${event.description}, '${event.venue_id}', '${event.price}', '${event.url}', '${event.city}', '${event.image_url}', '${event.start_datetime}', '${event.end_datetime}', '${event.category_id}' WHERE NOT EXISTS (SELECT 1 from events WHERE id='${event.id}')`)).then( (results) => {
-          resolve(results);
-        }).catch((err) => {
-          console.log('Error occurred adding events to DB: ');
-          reject(err);
-        });
-      });
-    });
-  }
-
 };
 
 
@@ -260,4 +173,3 @@ const addCategories = (categoryList) => {
     });
   });
 };
-

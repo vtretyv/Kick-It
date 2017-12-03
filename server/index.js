@@ -32,10 +32,10 @@ const app = express();
 //     .then((error, userProfile) => callback(null, userProfile));
 // }));
 
-passport.serializeUser((user, done) => {
-  //console.log('User: ', user.displayName); // If there is a persistent session, the console logs out the displayName
-  done(null, user.id);
-});
+// passport.serializeUser((user, done) => {
+//   //console.log('User: ', user.displayName); // If there is a persistent session, the console logs out the displayName
+//   done(null, user.id);
+// });
 
 // passport.deserializeUser((obj, done) => {
 //   done(null, obj);
@@ -45,8 +45,8 @@ app.use(express.static(path.join(__dirname, '/../client/dist')));
 app.use(bodyParser.json());
 app.use(session({ secret: 'chadam' }));
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // ======================================================================
 //                    Gathering massive data from EventBrite
@@ -54,7 +54,7 @@ app.use(passport.session());
 
 const { getCityData } = require('../sampleData/getCityData.js');
 
-getCityData();
+// getCityData();
 
 // ======================================================================
 //                    User login to Google
