@@ -22,24 +22,24 @@ const app = express();
 //                    Passport Initialization
 // ======================================================================
 
-passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://127.0.0.1:3000/auth/google/callback',
-  passReqToCallBack: true,
-}, (accessToken, refreshToken, userProfile, callback) => {
-  Promise.resolve(console.log('user profile:', userProfile))
-    .then((error, userProfile) => callback(null, userProfile));
-}));
+// passport.use(new GoogleStrategy({
+//   clientID: GOOGLE_CLIENT_ID,
+//   clientSecret: GOOGLE_CLIENT_SECRET,
+//   callbackURL: 'http://127.0.0.1:3000/auth/google/callback',
+//   passReqToCallBack: true,
+// }, (accessToken, refreshToken, userProfile, callback) => {
+//   Promise.resolve(console.log('user profile:', userProfile))
+//     .then((error, userProfile) => callback(null, userProfile));
+// }));
 
 passport.serializeUser((user, done) => {
   //console.log('User: ', user.displayName); // If there is a persistent session, the console logs out the displayName
   done(null, user.id);
 });
 
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
-});
+// passport.deserializeUser((obj, done) => {
+//   done(null, obj);
+// });
 
 app.use(express.static(path.join(__dirname, '/../client/dist')));
 app.use(bodyParser.json());
@@ -60,18 +60,15 @@ getCityData();
 //                    User login to Google
 // ======================================================================
 
-app.get('/auth/google',
-  (req, res, next) => {
-    console.log('login endpoint is working!');
-    next();
-  },
-  passport.authenticate('google', { scope:
-    [ 'profile',
-      'email' ] }
-));
-
-
-
+// app.get('/auth/google',
+//   (req, res, next) => {
+//     console.log('login endpoint is working!');
+//     next();
+//   },
+//   passport.authenticate('google', { scope:
+//     [ 'profile',
+//       'email' ] }
+// ));
 
 app.get(
   '/auth/google/callback',
@@ -85,6 +82,7 @@ app.get(
     failureRedirect: '/' }),
   (req, res) => res.redirect('/')
 );
+
 
 // ======================================================================
 //        Database Functions
